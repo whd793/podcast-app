@@ -1,42 +1,50 @@
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 
-const PodcastsSchema = new mongoose.Schema({
+const PodcastsSchema = new mongoose.Schema(
+  {
     name: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     desc: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     thumbnail: {
-        type: String,
-        default: "",
+      type: String,
+      default: "",
     },
-    creator:{
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
+    creator: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
     tags: {
-        type: [String],
-        default: [],
+      type: [String],
+      default: [],
     },
     type: {
-        type: String,
-        default: "audio",
+      type: String,
+      default: "audio",
     },
     category: {
-        type: String,
-        default: "podcast",
+      type: String,
+      default: "podcast",
     },
-    file: {
-        type: String,
-        default: "",
+    views: {
+      type: Number,
+      default: 0,
     },
-},
-    { timestamps: true,
-     }
+    episodes: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "Episodes",
+      default: [],
+    },
+  },
+  {
+    timestamps: true,
+  }
 );
 
 export default mongoose.model("Podcasts", PodcastsSchema);

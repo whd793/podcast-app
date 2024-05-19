@@ -6,20 +6,16 @@ import { closeSnackbar } from "../redux/snackbarSlice";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
-const ToastMessage = ({
-    message,
-    severity,
-    open,
-}) => {
+const ToastMessage = ({ message, severity, open }) => {
   const dispatch = useDispatch();
   return (
     <Snackbar
       open={open}
       autoHideDuration={6000}
-      onClose={ ()=> dispatch(closeSnackbar())}
+      onClose={() => dispatch(closeSnackbar())}
     >
       <Alert
-        onClose={()=> dispatch(closeSnackbar())}
+        onClose={() => dispatch(closeSnackbar())}
         severity={severity}
         sx={{ width: "100%" }}
       >

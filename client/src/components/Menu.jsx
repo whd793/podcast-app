@@ -1,18 +1,18 @@
-import React from "react";
-import styled from "styled-components";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { logout } from "../redux/userSlice";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
-import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
-import FavoriteRoundedIcon from "@mui/icons-material/FavoriteRounded";
-import BackupRoundedIcon from "@mui/icons-material/BackupRounded";
-import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
-import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
-import ExitToAppRoundedIcon from "@mui/icons-material/ExitToAppRounded";
-import CloseRounded from "@mui/icons-material/CloseRounded";
+import React from 'react';
+import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { logout } from '../redux/userSlice';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
+import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
+import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
+import BackupRoundedIcon from '@mui/icons-material/BackupRounded';
+import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
+import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
+import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
+import CloseRounded from '@mui/icons-material/CloseRounded';
 
 const MenuContainer = styled.div`
   flex: 0.5;
@@ -79,13 +79,13 @@ const Menu = ({
         <Close>
           <CloseRounded
             onClick={() => setMenuOpen(false)}
-            style={{ cursor: "pointer" }}
+            style={{ cursor: 'pointer' }}
           />
         </Close>
       </Flex>
       <Link
         to='/'
-        style={{ textDecoration: "none", color: "inherit", width: "100%" }}
+        style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}
       >
         <Elements>
           <HomeRoundedIcon />
@@ -94,7 +94,7 @@ const Menu = ({
       </Link>
       <Link
         to='/search'
-        style={{ textDecoration: "none", color: "inherit", width: "100%" }}
+        style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}
       >
         <Elements>
           <SearchRoundedIcon />
@@ -104,7 +104,7 @@ const Menu = ({
       {currentUser ? (
         <Link
           to='/favourites'
-          style={{ textDecoration: "none", color: "inherit", width: "100%" }}
+          style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}
         >
           <Elements>
             <FavoriteRoundedIcon />
@@ -114,7 +114,7 @@ const Menu = ({
       ) : (
         <Link
           onClick={() => setSignInOpen(true)}
-          style={{ textDecoration: "none", color: "inherit", width: "100%" }}
+          style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}
         >
           <Elements>
             <FavoriteRoundedIcon />
@@ -131,7 +131,7 @@ const Menu = ({
             setSignInOpen(true);
           }
         }}
-        style={{ textDecoration: "none", color: "inherit", width: "100%" }}
+        style={{ textDecoration: 'none', color: 'inherit', width: '100%' }}
       >
         <Elements>
           <BackupRoundedIcon />

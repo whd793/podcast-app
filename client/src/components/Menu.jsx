@@ -84,7 +84,7 @@ const Menu = ({
         </Close>
       </Flex>
       <Link
-        to="/"
+        to='/'
         style={{ textDecoration: "none", color: "inherit", width: "100%" }}
       >
         <Elements>
@@ -93,7 +93,7 @@ const Menu = ({
         </Elements>
       </Link>
       <Link
-        to="/search"
+        to='/search'
         style={{ textDecoration: "none", color: "inherit", width: "100%" }}
       >
         <Elements>
@@ -103,7 +103,7 @@ const Menu = ({
       </Link>
       {currentUser ? (
         <Link
-          to="/favourites"
+          to='/favourites'
           style={{ textDecoration: "none", color: "inherit", width: "100%" }}
         >
           <Elements>

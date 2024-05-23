@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import styled from "styled-components";
-import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { Avatar } from '@mui/material';
-import PersonIcon from '@mui/icons-material/Person';
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Avatar } from "@mui/material";
+import PersonIcon from "@mui/icons-material/Person";
+import MenuIcon from "@mui/icons-material/Menu";
+import { IconButton } from "@mui/material";
 
 const NavbarDiv = styled.div`
   display: flex;
@@ -36,7 +38,7 @@ const ButtonDiv = styled.div`
   align-items: center;
   justify-content: center;
   gap: 6px;
-  &:hover{
+  &:hover {
     background-color: ${({ theme }) => theme.primary};
     color: ${({ theme }) => theme.text_primary};
   }
@@ -47,35 +49,39 @@ const Welcome = styled.div`
   font-weight: 600;
 `;
 
+const IcoButton = styled(IconButton)`
+  color: ${({ theme }) => theme.text_secondary} !important;
+`;
 
-
-const Navbar = ({ setSignInOpen, setSignUpOpen }) => {
-
-  const { currentUser } = useSelector(state => state.user);
-
+const Navbar = ({ menuOpen, setMenuOpen, setSignInOpen, setSignUpOpen }) => {
+  const { currentUser } = useSelector((state) => state.user);
 
   return (
     <NavbarDiv>
-      {currentUser ?
-      <Welcome>
-        Welcome, {currentUser.name}
-      </Welcome>
-      :
-      <>&nbsp;</>}
-      {
-        currentUser ? <>
-        <Link to='/profile' style={{textDecoration: 'none'}}>
-          <Avatar src={currentUser.img} >{currentUser.name.charAt(0).toUpperCase()}</Avatar>
-        </Link>
+      <IcoButton onClick={() => setMenuOpen(!menuOpen)}>
+        <MenuIcon />
+      </IcoButton>
+      {currentUser ? (
+        <Welcome>Welcome, {currentUser.name}</Welcome>
+      ) : (
+        <>&nbsp;</>
+      )}
+      {currentUser ? (
+        <>
+          <Link to="/profile" style={{ textDecoration: "none" }}>
+            <Avatar src={currentUser.img}>
+              {currentUser.name.charAt(0).toUpperCase()}
+            </Avatar>
+          </Link>
         </>
-          :
-          <ButtonDiv onClick={() => setSignInOpen(true)}>
-            <PersonIcon style={{ fontSize: "18px" }} />
-            Login
-          </ButtonDiv>
-      }
+      ) : (
+        <ButtonDiv onClick={() => setSignInOpen(true)}>
+          <PersonIcon style={{ fontSize: "18px" }} />
+          Login
+        </ButtonDiv>
+      )}
     </NavbarDiv>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

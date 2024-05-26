@@ -5,14 +5,14 @@ import { PodcastCard } from '../components/PodcastCard';
 import { getUsers } from '../api/index';
 
 const Container = styled.div`
-padding: 20px 30px;
-padding-bottom: 200px;
-height: 100%;
-overflow-y: scroll;
-display: flex;
-flex-direction: column;
-gap: 20px;
-`
+  padding: 20px 30px;
+  padding-bottom: 200px;
+  height: 100%;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
 const Topic = styled.div`
   color: ${({ theme }) => theme.text_primary};
   font-size: 24px;
@@ -23,25 +23,27 @@ const Topic = styled.div`
 `;
 
 const FavouritesContainer = styled.div`
-display: grid;
-grid-template-columns: repeat(auto-fit, minmax(200px, 3fr));
-gap: 14px;
-padding: 18px 6px;
-`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 18px 6px;
+`;
 
 const Favourites = () => {
   const [user, setUser] = useState();
   //user
-  const { currentUser } = useSelector(state => state.user);
+  const { currentUser } = useSelector((state) => state.user);
 
-  const token = localStorage.getItem("podstreamtoken");
+  const token = localStorage.getItem('podstreamtoken');
   const getUser = async () => {
-    await getUsers(token).then((res) => {
-      setUser(res.data)
-    }).then((error) => {
-      console.log(error)
-    });
-  }
+    await getUsers(token)
+      .then((res) => {
+        setUser(res.data);
+      })
+      .then((error) => {
+        console.log(error);
+      });
+  };
 
   useEffect(() => {
     if (currentUser) {
@@ -51,16 +53,15 @@ const Favourites = () => {
 
   return (
     <Container>
-      <Topic>
-        Favourites
-      </Topic>
+      <Topic>Favourites</Topic>
       <FavouritesContainer>
-        {user && user?.favorits.map((podcast) => (
-          <PodcastCard podcast={podcast} user={user}/>
-        ))}
+        {user &&
+          user?.favorits.map((podcast) => (
+            <PodcastCard podcast={podcast} user={user} />
+          ))}
       </FavouritesContainer>
     </Container>
-  )
-}
+  );
+};
 
-export default Favourites
+export default Favourites;

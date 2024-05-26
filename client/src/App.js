@@ -47,7 +47,6 @@ function App() {
   );
   const [SignUpOpen, setSignUpOpen] = useState(false);
   const [SignInOpen, setSignInOpen] = useState(false);
-  const [videoOpen, setVideoOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(true);
   const [uploadOpen, setUploadOpen] = useState(false);
 

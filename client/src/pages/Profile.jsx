@@ -7,11 +7,17 @@ import { PodcastCard } from '../components/PodcastCard.jsx';
 
 const ProfileAvatar = styled.div`
   padding-left: 3rem;
+  @media (max-width: 768px) {
+    padding-left: 0rem;
+  }
 `;
 const ProfileContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  @media (max-width: 768px) {
+    align-items: center;
+  }
 `;
 const ProfileName = styled.div`
   color: ${({ theme }) => theme.text_primary};
@@ -54,24 +60,33 @@ const Span = styled.span`
   }
 `;
 const Podcasts = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 3fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 14px;
   padding: 18px 6px;
+  @media (max-width: 550px) {
+    justify-content: center;
+  }
 `;
 const ProfileMain = styled.div`
-  padding: 20px;
+  padding: 20px 30px;
+  padding-bottom: 200px;
+  height: 100%;
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   gap: 20px;
-  overflow-y: scroll;
-  height: 100%;
 `;
 const UserDetails = styled.div`
 display flex;
-gap: 120px
-
+gap: 120px;
+@media (max-width: 768px) {
+    width: fit-content;
+    flex-direction: column; 
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 const Container = styled.div`
   display: flex;
@@ -128,9 +143,11 @@ const Profile = () => {
       <UserDetails>
         <ProfileAvatar>
           <Avatar
-            sx={{ height: 165, width: 165 }}
-            src={user?.thumbnail}
-          ></Avatar>
+            sx={{ height: 165, width: 165, fontSize: '24px' }}
+            src={user?.img}
+          >
+            {user?.name.charAt(0).toUpperCase()}
+          </Avatar>
         </ProfileAvatar>
 
         <ProfileContainer>
@@ -140,25 +157,22 @@ const Profile = () => {
       </UserDetails>
       {currentUser && user?.podcasts.length > 0 && (
         <FilterContainer box={true}>
-          <Topic>
-            Your Uploads
-            <Span>Show All</Span>
-          </Topic>
+          <Topic>Your Uploads</Topic>
           <Podcasts>
-            {user?.podcasts.slice(0, 6).map((podcast) => (
+            {user?.podcasts.map((podcast) => (
               <PodcastCard podcast={podcast} user={user} />
             ))}
           </Podcasts>
         </FilterContainer>
       )}
-      <FilterContainer box={true}>
-        <Topic>Your Uploads</Topic>
-        <Container>
-          {currentUser && user?.podcasts.length === 0 && (
+      {currentUser && user?.podcasts.length === 0 && (
+        <FilterContainer box={true}>
+          <Topic>Your Uploads</Topic>
+          <Container>
             <ButtonContainer>Upload</ButtonContainer>
-          )}
-        </Container>
-      </FilterContainer>
+          </Container>
+        </FilterContainer>
+      )}
       <FilterContainer box={true}>
         <Topic>Your Favourites</Topic>
         <Podcasts>

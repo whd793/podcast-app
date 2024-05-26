@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { Avatar } from "@mui/material";
-import PersonIcon from "@mui/icons-material/Person";
-import MenuIcon from "@mui/icons-material/Menu";
-import { IconButton } from "@mui/material";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Avatar } from '@mui/material';
+import PersonIcon from '@mui/icons-material/Person';
+import MenuIcon from '@mui/icons-material/Menu';
+import { IconButton } from '@mui/material';
 
 const NavbarDiv = styled.div`
   display: flex;
@@ -68,7 +68,7 @@ const Navbar = ({ menuOpen, setMenuOpen, setSignInOpen, setSignUpOpen }) => {
       )}
       {currentUser ? (
         <>
-          <Link to="/profile" style={{ textDecoration: "none" }}>
+          <Link to='/profile' style={{ textDecoration: 'none' }}>
             <Avatar src={currentUser.img}>
               {currentUser.name.charAt(0).toUpperCase()}
             </Avatar>
@@ -76,7 +76,7 @@ const Navbar = ({ menuOpen, setMenuOpen, setSignInOpen, setSignUpOpen }) => {
         </>
       ) : (
         <ButtonDiv onClick={() => setSignInOpen(true)}>
-          <PersonIcon style={{ fontSize: "18px" }} />
+          <PersonIcon style={{ fontSize: '18px' }} />
           Login
         </ButtonDiv>
       )}

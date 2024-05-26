@@ -1,5 +1,5 @@
 import { ThemeProvider } from 'styled-components';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { darkTheme, lightTheme } from './utils/Themes.js';
 import Signup from '../src/components/Signup.jsx';
 import Signin from '../src/components/Signin.jsx';
@@ -47,9 +47,25 @@ function App() {
   );
   const [SignUpOpen, setSignUpOpen] = useState(false);
   const [SignInOpen, setSignInOpen] = useState(false);
+  const [videoOpen, setVideoOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(true);
   const [uploadOpen, setUploadOpen] = useState(false);
 
   const { currentUser } = useSelector((state) => state.user);
+
+  //set the menuOpen state to false if the screen size is less than 768px
+  useEffect(() => {
+    const resize = () => {
+      if (window.innerWidth < 1110) {
+        setMenuOpen(false);
+      } else {
+        setMenuOpen(true);
+      }
+    };
+    resize();
+    window.addEventListener('resize', resize);
+    return () => window.removeEventListener('resize', resize);
+  }, []);
 
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
@@ -66,14 +82,19 @@ function App() {
         )}
         {openaudio && <AudioPlayer episode={episode} podid={podid} />}
         <Podstream>
-          <Menu
-            darkMode={darkMode}
-            setDarkMode={setDarkMode}
-            setUploadOpen={setUploadOpen}
-            setSignInOpen={setSignInOpen}
-          />
+          {menuOpen && (
+            <Menu
+              setMenuOpen={setMenuOpen}
+              darkMode={darkMode}
+              setDarkMode={setDarkMode}
+              setUploadOpen={setUploadOpen}
+              setSignInOpen={setSignInOpen}
+            />
+          )}
           <Frame>
             <Navbar
+              menuOpen={menuOpen}
+              setMenuOpen={setMenuOpen}
               setSignInOpen={setSignInOpen}
               setSignUpOpen={setSignUpOpen}
             />

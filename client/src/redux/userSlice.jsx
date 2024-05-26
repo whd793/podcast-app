@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   currentUser: null,
@@ -7,7 +7,7 @@ const initialState = {
 };
 
 export const userSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState,
   reducers: {
     loginStart: (state) => {
@@ -29,9 +29,13 @@ export const userSlice = createSlice({
       localStorage.removeItem('token');
     },
     verified: (state, action) => {
-      if(state.currentUser){
+      if (state.currentUser) {
         state.currentUser.verified = action.payload;
       }
+    },
+    displayPodcastFailure: (state) => {
+      state.loading = false;
+      state.error = true;
     },
     subscription: (state, action) => {
       if (state.currentUser.subscribedUsers.includes(action.payload)) {
@@ -48,7 +52,14 @@ export const userSlice = createSlice({
   },
 });
 
-export const { loginStart, loginSuccess, loginFailure, logout, subscription,verified } =
-  userSlice.actions;
+export const {
+  loginStart,
+  loginSuccess,
+  loginFailure,
+  logout,
+  displayPodcastFailure,
+  subscription,
+  verified,
+} = userSlice.actions;
 
 export default userSlice.reducer;

@@ -4,27 +4,27 @@ import {
   CloudDone,
   CloudDoneRounded,
   Create,
-} from "@mui/icons-material";
+} from '@mui/icons-material';
 import {
   CircularProgress,
   IconButton,
   LinearProgress,
   Modal,
-} from "@mui/material";
-import React, { useEffect } from "react";
-import styled from "styled-components";
+} from '@mui/material';
+import React, { useEffect } from 'react';
+import styled from 'styled-components';
 import {
   getStorage,
   ref,
   uploadBytesResumable,
   getDownloadURL,
-} from "firebase/storage";
-import app from "../firebase";
-import ImageSelector from "./ImageSelector";
-import { useDispatch } from "react-redux";
-import { openSnackbar } from "../redux/snackbarSlice";
-import { createPodcast } from "../api";
-import { Category } from "../utils/Data";
+} from 'firebase/storage';
+import app from '../firebase';
+import ImageSelector from './ImageSelector';
+import { useDispatch } from 'react-redux';
+import { openSnackbar } from '../redux/snackbarSlice';
+import { createPodcast } from '../api';
+import { Category } from '../utils/Data';
 
 const Container = styled.div`
   width: 100%;
@@ -184,18 +184,18 @@ const Uploading = styled.div`
 
 const Upload = ({ setUploadOpen }) => {
   const [podcast, setPodcast] = React.useState({
-    name: "",
-    desc: "",
-    thumbnail: "",
+    name: '',
+    desc: '',
+    thumbnail: '',
     tags: [],
-    category: "",
-    type: "audio",
+    category: '',
+    type: 'audio',
     episodes: [
       {
-        name: "",
-        desc: "",
-        type: "audio",
-        file: "",
+        name: '',
+        desc: '',
+        type: 'audio',
+        file: '',
       },
     ],
   });
@@ -207,7 +207,7 @@ const Upload = ({ setUploadOpen }) => {
 
   const dispatch = useDispatch();
 
-  const token = localStorage.getItem("podstreamtoken");
+  const token = localStorage.getItem('podstreamtoken');
 
   const goToAddEpisodes = () => {
     setShowEpisode(true);
@@ -221,21 +221,21 @@ const Upload = ({ setUploadOpen }) => {
     if (podcast === null) {
       setDisabled(true);
       setPodcast({
-        name: "",
-        desc: "",
-        thumbnail: "",
+        name: '',
+        desc: '',
+        thumbnail: '',
         tags: [],
         episodes: [
           {
-            name: "",
-            desc: "",
-            type: "audio",
-            file: "",
+            name: '',
+            desc: '',
+            type: 'audio',
+            file: '',
           },
         ],
       });
     } else {
-      if (podcast.name === "" && podcast.desc === "") {
+      if (podcast.name === '' && podcast.desc === '') {
         setDisabled(true);
       } else {
         setDisabled(false);
@@ -250,18 +250,18 @@ const Upload = ({ setUploadOpen }) => {
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(
-      "state_changed",
+      'state_changed',
       (snapshot) => {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         podcast.episodes[index].file.uploadProgress = Math.round(progress);
         setPodcast({ ...podcast, episodes: podcast.episodes });
         switch (snapshot.state) {
-          case "paused":
-            console.log("Upload is paused");
+          case 'paused':
+            console.log('Upload is paused');
             break;
-          case "running":
-            console.log("Upload is running");
+          case 'running':
+            console.log('Upload is running');
             break;
           default:
             break;
@@ -291,8 +291,8 @@ const Upload = ({ setUploadOpen }) => {
         dispatch(
           openSnackbar({
             open: true,
-            message: "Podcast created successfully",
-            severity: "success",
+            message: 'Podcast created successfully',
+            severity: 'success',
           })
         );
       })
@@ -304,8 +304,8 @@ const Upload = ({ setUploadOpen }) => {
         dispatch(
           openSnackbar({
             open: true,
-            message: "Error creating podcast",
-            severity: "error",
+            message: 'Error creating podcast',
+            severity: 'error',
           })
         );
       });
@@ -316,13 +316,13 @@ const Upload = ({ setUploadOpen }) => {
       podcast.episodes.length > 0 &&
       podcast.episodes.every(
         (episode) =>
-          episode.file !== "" &&
-          episode.name !== "" &&
-          episode.desc !== "" &&
-          podcast.name !== "" &&
-          podcast.desc !== "" &&
-          podcast.tags !== "" &&
-          podcast.image !== "" &&
+          episode.file !== '' &&
+          episode.name !== '' &&
+          episode.desc !== '' &&
+          podcast.name !== '' &&
+          podcast.desc !== '' &&
+          podcast.tags !== '' &&
+          podcast.image !== '' &&
           podcast.image !== undefined &&
           podcast.image !== null
       )
@@ -339,10 +339,10 @@ const Upload = ({ setUploadOpen }) => {
         <Wrapper>
           <CloseRounded
             style={{
-              position: "absolute",
-              top: "24px",
-              right: "30px",
-              cursor: "pointer",
+              position: 'absolute',
+              top: '24px',
+              right: '30px',
+              cursor: 'pointer',
             }}
             onClick={() => setUploadOpen(false)}
           />
@@ -352,20 +352,20 @@ const Upload = ({ setUploadOpen }) => {
               <Label>Podcast Details:</Label>
 
               <ImageSelector podcast={podcast} setPodcast={setPodcast} />
-              <OutlinedBox style={{ marginTop: "12px" }}>
+              <OutlinedBox style={{ marginTop: '12px' }}>
                 <TextInput
-                  placeholder="Podcast Name*"
-                  type="text"
+                  placeholder='Podcast Name*'
+                  type='text'
                   value={podcast?.name}
                   onChange={(e) =>
                     setPodcast({ ...podcast, name: e.target.value })
                   }
                 />
               </OutlinedBox>
-              <OutlinedBox style={{ marginTop: "6px" }}>
+              <OutlinedBox style={{ marginTop: '6px' }}>
                 <Desc
-                  placeholder="Podcast Description* "
-                  name="desc"
+                  placeholder='Podcast Description* '
+                  name='desc'
                   rows={5}
                   value={podcast?.desc}
                   onChange={(e) =>
@@ -373,46 +373,46 @@ const Upload = ({ setUploadOpen }) => {
                   }
                 />
               </OutlinedBox>
-              <OutlinedBox style={{ marginTop: "6px" }}>
+              <OutlinedBox style={{ marginTop: '6px' }}>
                 <Desc
-                  placeholder="Tags seperate by ,"
-                  name="tags"
+                  placeholder='Tags seperate by ,'
+                  name='tags'
                   rows={4}
                   value={podcast?.tags}
                   onChange={(e) =>
-                    setPodcast({ ...podcast, tags: e.target.value.split(",") })
+                    setPodcast({ ...podcast, tags: e.target.value.split(',') })
                   }
                 />
               </OutlinedBox>
               <div
                 style={{
-                  display: "flex",
-                  gap: "0px",
-                  width: "100%",
-                  gap: "6px",
+                  display: 'flex',
+                  gap: '0px',
+                  width: '100%',
+                  gap: '6px',
                 }}
               >
                 <OutlinedBox
                   style={{
-                    marginTop: "6px",
-                    width: "100%",
-                    marginRight: "0px",
+                    marginTop: '6px',
+                    width: '100%',
+                    marginRight: '0px',
                   }}
                 >
                   <Select
-                    onSelect={(e) =>
+                    onChange={(e) =>
                       setPodcast({ ...podcast, type: e.target.value })
                     }
                   >
-                    <Option value="audio">Audio</Option>
-                    <Option value="video">Video</Option>
+                    <Option value='audio'>Audio</Option>
+                    <Option value='video'>Video</Option>
                   </Select>
                 </OutlinedBox>
                 <OutlinedBox
-                  style={{ marginTop: "6px", width: "100%", marginLeft: "0px" }}
+                  style={{ marginTop: '6px', width: '100%', marginLeft: '0px' }}
                 >
                   <Select
-                    onSelect={(e) =>
+                    onChange={(e) =>
                       setPodcast({ ...podcast, category: e.target.value })
                     }
                   >
@@ -428,7 +428,7 @@ const Upload = ({ setUploadOpen }) => {
               <OutlinedBox
                 button={true}
                 activeButton={!disabled}
-                style={{ marginTop: "22px", marginBottom: "18px" }}
+                style={{ marginTop: '22px', marginBottom: '18px' }}
                 onClick={() => {
                   !disabled && goToAddEpisodes();
                 }}
@@ -441,8 +441,8 @@ const Upload = ({ setUploadOpen }) => {
               <Label>Episode Details:</Label>
               {podcast.episodes.map((episode, index) => (
                 <>
-                  <FileUpload for={"fileField" + index}>
-                    {podcast.episodes[index].file === "" ? (
+                  <FileUpload for={'fileField' + index}>
+                    {podcast.episodes[index].file === '' ? (
                       <Uploading>
                         <BackupRounded />
                         Select Audio / Video
@@ -452,14 +452,14 @@ const Upload = ({ setUploadOpen }) => {
                         {podcast.episodes[index].file.name === undefined ? (
                           <div
                             style={{
-                              color: "green",
-                              display: "flex",
-                              gap: "6px",
-                              alignItems: "center",
-                              justifyContent: "center",
+                              color: 'green',
+                              display: 'flex',
+                              gap: '6px',
+                              alignItems: 'center',
+                              justifyContent: 'center',
                             }}
                           >
-                            <CloudDoneRounded sx={{ color: "inherit" }} />
+                            <CloudDoneRounded sx={{ color: 'inherit' }} />
                             File Uploaded Successfully
                           </div>
                         ) : (
@@ -467,15 +467,15 @@ const Upload = ({ setUploadOpen }) => {
                             File: {podcast.episodes[index].file.name}
                             <LinearProgress
                               sx={{
-                                borderRadius: "10px",
+                                borderRadius: '10px',
                                 height: 3,
-                                width: "100%",
+                                width: '100%',
                               }}
-                              variant="determinate"
+                              variant='determinate'
                               value={
                                 podcast.episodes[index].file.uploadProgress
                               }
-                              color={"success"}
+                              color={'success'}
                             />
                             {podcast.episodes[index].file.uploadProgress}%
                             Uploaded
@@ -485,10 +485,10 @@ const Upload = ({ setUploadOpen }) => {
                     )}
                   </FileUpload>
                   <File
-                    style={{ marginTop: "16px" }}
-                    type="file"
-                    accept="file_extension|audio/*|video/*|media_type"
-                    id={"fileField" + index}
+                    style={{ marginTop: '16px' }}
+                    type='file'
+                    accept='file_extension|audio/*|video/*|media_type'
+                    id={'fileField' + index}
                     onChange={(e) => {
                       podcast.episodes[index].file = e.target.files[0];
                       setPodcast({ ...podcast, episodes: podcast.episodes });
@@ -497,8 +497,8 @@ const Upload = ({ setUploadOpen }) => {
                   />
                   <OutlinedBox>
                     <TextInput
-                      placeholder="Episode Name*"
-                      type="text"
+                      placeholder='Episode Name*'
+                      type='text'
                       value={episode.name}
                       onChange={(e) => {
                         const newEpisodes = podcast.episodes;
@@ -507,10 +507,10 @@ const Upload = ({ setUploadOpen }) => {
                       }}
                     />
                   </OutlinedBox>
-                  <OutlinedBox style={{ marginTop: "6px" }}>
+                  <OutlinedBox style={{ marginTop: '6px' }}>
                     <Desc
-                      placeholder="Episode Description* "
-                      name="desc"
+                      placeholder='Episode Description* '
+                      name='desc'
                       rows={5}
                       value={episode.desc}
                       onChange={(e) => {
@@ -523,7 +523,7 @@ const Upload = ({ setUploadOpen }) => {
                   <OutlinedBox
                     button={true}
                     activeButton={false}
-                    style={{ marginTop: "6px", marginBottom: "12px" }}
+                    style={{ marginTop: '6px', marginBottom: '12px' }}
                     onClick={() =>
                       setPodcast({
                         ...podcast,
@@ -540,13 +540,13 @@ const Upload = ({ setUploadOpen }) => {
               <OutlinedBox
                 button={true}
                 activeButton
-                style={{ marginTop: "4px", marginBottom: "18px" }}
+                style={{ marginTop: '4px', marginBottom: '18px' }}
                 onClick={() =>
                   setPodcast({
                     ...podcast,
                     episodes: [
                       ...podcast.episodes,
-                      { name: "", desc: "", file: "" },
+                      { name: '', desc: '', file: '' },
                     ],
                   })
                 }
@@ -558,7 +558,7 @@ const Upload = ({ setUploadOpen }) => {
                 <OutlinedBox
                   button={true}
                   activeButton={false}
-                  style={{ marginTop: "6px", width: "100%", margin: 0 }}
+                  style={{ marginTop: '6px', width: '100%', margin: 0 }}
                   onClick={() => {
                     !backDisabled && goToPodcast();
                   }}
@@ -568,15 +568,15 @@ const Upload = ({ setUploadOpen }) => {
                 <OutlinedBox
                   button={true}
                   activeButton={!disabled}
-                  style={{ marginTop: "6px", width: "100%", margin: 0 }}
+                  style={{ marginTop: '6px', width: '100%', margin: 0 }}
                   onClick={() => {
                     !disabled && createpodcast();
                   }}
                 >
                   {loading ? (
-                    <CircularProgress color="inherit" size={20} />
+                    <CircularProgress color='inherit' size={20} />
                   ) : (
-                    "Create"
+                    'Create'
                   )}
                 </OutlinedBox>
               </ButtonContainer>

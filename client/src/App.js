@@ -14,11 +14,12 @@ import Profile from '../src/pages/Profile.jsx';
 import Upload from '../src/components/Upload.jsx';
 import DisplayPodcasts from '../src/pages/DisplayPodcasts.jsx';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import AudioPlayer from './components/AudioPlayer.jsx';
 import VideoPlayer from './components/VideoPlayer.jsx';
 import PodcastDetails from './pages/PodcastDetails.jsx';
+import { closeSignin } from './redux/setSigninSlice.jsx';
 
 const Frame = styled.div`
   display: flex;
@@ -39,19 +40,17 @@ const Podstream = styled.div`
 function App() {
   const [darkMode, setDarkMode] = useState(true);
   const { open, message, severity } = useSelector((state) => state.snackbar);
-  const { openaudio, episode, podid } = useSelector(
+  const { openplayer, type, episode, podid, currenttime, index } = useSelector(
     (state) => state.audioplayer
   );
-  const { openvideo, videoepisode, videopodid } = useSelector(
-    (state) => state.videoplayer
-  );
+  const { opensi } = useSelector((state) => state.signin);
   const [SignUpOpen, setSignUpOpen] = useState(false);
   const [SignInOpen, setSignInOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(true);
   const [uploadOpen, setUploadOpen] = useState(false);
 
   const { currentUser } = useSelector((state) => state.user);
-
+  const dispatch = useDispatch();
   //set the menuOpen state to false if the screen size is less than 768px
   useEffect(() => {
     const resize = () => {
@@ -66,20 +65,36 @@ function App() {
     return () => window.removeEventListener('resize', resize);
   }, []);
 
+  useEffect(() => {
+    dispatch(closeSignin());
+  }, []);
+
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
       <BrowserRouter>
-        {SignInOpen && (
+        {opensi && (
           <Signin setSignInOpen={setSignInOpen} setSignUpOpen={setSignUpOpen} />
         )}
         {SignUpOpen && (
           <Signup setSignInOpen={setSignInOpen} setSignUpOpen={setSignUpOpen} />
         )}
         {uploadOpen && <Upload setUploadOpen={setUploadOpen} />}
-        {openvideo && (
-          <VideoPlayer videoepisode={videoepisode} videopodid={videopodid} />
+        {openplayer && type === 'video' && (
+          <VideoPlayer
+            episode={episode}
+            podid={podid}
+            currenttime={currenttime}
+            index={index}
+          />
         )}
-        {openaudio && <AudioPlayer episode={episode} podid={podid} />}
+        {openplayer && type === 'audio' && (
+          <AudioPlayer
+            episode={episode}
+            podid={podid}
+            currenttime={currenttime}
+            index={index}
+          />
+        )}
         <Podstream>
           {menuOpen && (
             <Menu
@@ -98,7 +113,11 @@ function App() {
               setSignUpOpen={setSignUpOpen}
             />
             <Routes>
-              <Route path='/' exact element={<Dashboard />} />
+              <Route
+                path='/'
+                exact
+                element={<Dashboard setSignInOpen={setSignInOpen} />}
+              />
               <Route path='/search' exact element={<Search />} />
               <Route path='/favourites' exact element={<Favourites />} />
               <Route path='/profile' exact element={<Profile />} />

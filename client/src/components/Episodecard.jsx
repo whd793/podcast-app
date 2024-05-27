@@ -1,8 +1,10 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { closeAudioPlayer, openAudioPlayer } from '../redux/audioplayerSlice';
-import { openVideoPlayer, closeVideoPlayer } from '../redux/videoplayerSlice';
+import { closePlayer, openPlayer } from '../redux/audioplayerSlice';
+import { addView } from '../api';
+import { openSnackbar } from '../redux/snackbarSlice';
+import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 
 const Card = styled.div`
   display: flex;
@@ -20,6 +22,10 @@ const Card = styled.div`
     box-shadow: 0 0 18px 0 rgba(0, 0, 0, 0.3);
     filter: brightness(1.3);
   }
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 const Image = styled.img`
@@ -27,6 +33,7 @@ const Image = styled.img`
   height: 100px;
   border-radius: 6px;
   background-color: ${({ theme }) => theme.text_secondary};
+  object-fit: cover;
 `;
 
 const Details = styled.div`
@@ -50,34 +57,70 @@ const Description = styled.div`
   font-weight: 500;
   color: ${({ theme }) => theme.text_secondary};
 `;
+const ImageContainer = styled.div`
+  position: relative;
+  width: 100px;
+  height: 100px;
+`;
 
-const Episodecard = ({ episode, podid, user, type }) => {
+const Episodecard = ({ episode, podid, user, type, index }) => {
   const dispatch = useDispatch();
+
+  const addviewtToPodcast = async () => {
+    await addView(podid._id).catch((err) => {
+      dispatch(
+        openSnackbar({
+          message: err.message,
+          type: 'error',
+        })
+      );
+    });
+  };
+
   return (
     <Card
-      onClick={() => {
+      onClick={async () => {
+        await addviewtToPodcast();
         if (type === 'audio') {
           //open audio player
-          dispatch(closeVideoPlayer());
           dispatch(
-            openAudioPlayer({
+            openPlayer({
+              type: 'audio',
               episode: episode,
               podid: podid,
+              index: index,
+              currenttime: 0,
             })
           );
         } else {
           //open video player
-          dispatch(closeAudioPlayer());
           dispatch(
-            openVideoPlayer({
-              videoepisode: episode,
-              videopodid: podid,
-            })
+            dispatch(
+              openPlayer({
+                type: 'video',
+                episode: episode,
+                podid: podid,
+                index: index,
+                currenttime: 0,
+              })
+            )
           );
         }
       }}
     >
-      <Image src={podid?.thumbnail} />
+      <ImageContainer>
+        <Image src={podid?.thumbnail} />
+        <PlayCircleOutlineIcon
+          style={{
+            position: 'absolute',
+            top: '26px',
+            left: '26px',
+            color: 'white',
+            width: '50px',
+            height: '50px',
+          }}
+        />
+      </ImageContainer>
       <Details>
         <Title>{episode.name}</Title>
         <Description>{episode.desc}</Description>

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Avatar } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import MenuIcon from '@mui/icons-material/Menu';
 import { IconButton } from '@mui/material';
+import { openSignin } from '../redux/setSigninSlice';
 
 const NavbarDiv = styled.div`
   display: flex;
@@ -21,6 +22,9 @@ border-radius: 16px;
 box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 backdrop-filter: blur(5.7px);
 -webkit-backdrop-filter: blur(5.7px);
+@media (max-width: 768px) {
+    padding: 16px;
+  }
 
 `;
 const ButtonDiv = styled.div`
@@ -47,6 +51,9 @@ const ButtonDiv = styled.div`
 const Welcome = styled.div`
   font-size: 26px;
   font-weight: 600;
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
 `;
 
 const IcoButton = styled(IconButton)`
@@ -55,6 +62,7 @@ const IcoButton = styled(IconButton)`
 
 const Navbar = ({ menuOpen, setMenuOpen, setSignInOpen, setSignUpOpen }) => {
   const { currentUser } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   return (
     <NavbarDiv>
@@ -75,7 +83,7 @@ const Navbar = ({ menuOpen, setMenuOpen, setSignInOpen, setSignUpOpen }) => {
           </Link>
         </>
       ) : (
-        <ButtonDiv onClick={() => setSignInOpen(true)}>
+        <ButtonDiv onClick={() => dispatch(openSignin())}>
           <PersonIcon style={{ fontSize: '18px' }} />
           Login
         </ButtonDiv>

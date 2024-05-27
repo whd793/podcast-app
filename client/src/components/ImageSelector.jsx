@@ -5,7 +5,7 @@ import ReactImageFileToBase64 from 'react-file-image-to-base64';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 const Container = styled.div`
-    height: 120px;
+    height: 110px;
     display: flex;
     flex-direction: column;
     justify-content: center;

@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 const Card = styled.div`
   width: 150px;
@@ -12,6 +12,9 @@ const Card = styled.div`
     transition: all 0.4s ease-in-out;
     box-shadow: 0 0 18px 0 rgba(0, 0, 0, 0.3);
     filter: brightness(1.3);
+  }
+  @media (max-width: 768px) {
+    width: 250px;
   }
 `;
 const DefaultCardText = styled.div`
@@ -35,10 +38,10 @@ const FlexContainer = styled.div`
 `;
 export const DefaultCard = ({ category }) => {
   return (
-    <Card style={{ "background-color": `${category.color}` }}>
+    <Card style={{ 'background-color': `${category.color}` }}>
       <DefaultCardText>{category.name}</DefaultCardText>
       <FlexContainer>
-        <DefaultCardImg src={category.img} alt="podcast-image" />
+        <DefaultCardImg src={category.img} alt='podcast-image' />
       </FlexContainer>
     </Card>
   );

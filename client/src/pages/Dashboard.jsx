@@ -6,6 +6,7 @@ import { getPodcastByCategory } from '../api';
 import { PodcastCard } from '../components/PodcastCard.jsx';
 import { getUsers } from '../api/index';
 import { Link } from 'react-router-dom';
+import { CircularProgress } from '@mui/material';
 
 const DashboardMain = styled.div`
   padding: 20px 30px;
@@ -15,11 +16,13 @@ const DashboardMain = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
+  @media (max-width: 768px) {
+    padding: 6px 10px;
+  }
 `;
 const FilterContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   ${({ box, theme }) =>
     box &&
     `
@@ -27,6 +30,9 @@ background-color: ${theme.bg};
   border-radius: 10px;
   padding: 20px 30px;
 `}
+  background-color: ${({ theme }) => theme.bg};
+  border-radius: 10px;
+  padding: 20px 30px;
 `;
 const Topic = styled.div`
   color: ${({ theme }) => theme.text_primary};
@@ -35,12 +41,18 @@ const Topic = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  @maedia (max-width: 768px) {
+    font-size: 18px;
+  }
 `;
 const Span = styled.span`
   color: ${({ theme }) => theme.text_secondary};
   font-size: 16px;
   font-weight: 400;
   cursor: pointer;
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
   color: ${({ theme }) => theme.primary};
   &:hover {
     transition: 0.2s ease-in-out;
@@ -51,15 +63,36 @@ const Podcasts = styled.div`
   flex-wrap: wrap;
   gap: 14px;
   padding: 18px 6px;
+  //center the items if only one item present
+  @media (max-width: 550px) {
+    justify-content: center;
+  }
 `;
 
-const Dashboard = () => {
+const Loader = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+`;
+const DisplayNo = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  color: ${({ theme }) => theme.text_primary};
+`;
+
+const Dashboard = ({ setSignInOpen }) => {
   const [mostPopular, setMostPopular] = useState([]);
   const [user, setUser] = useState();
   const [comedy, setComedy] = useState([]);
-  const [horror, setHorror] = useState([]);
+  const [news, setNews] = useState([]);
   const [sports, setsports] = useState([]);
   const [crime, setCrime] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   //user
   const { currentUser } = useSelector((state) => state.user);
@@ -95,10 +128,10 @@ const Dashboard = () => {
       .catch((error) => console.log(error));
   };
 
-  const getHorrorPodcasts = async () => {
-    getPodcastByCategory('horror')
+  const getNewsPodcasts = async () => {
+    getPodcastByCategory('news')
       .then((res) => {
-        setHorror(res.data);
+        setNews(res.data);
         console.log(res.data);
       })
       .catch((error) => console.log(error));
@@ -122,101 +155,148 @@ const Dashboard = () => {
       .catch((error) => console.log(error));
   };
 
-  useEffect(() => {
+  const getallData = async () => {
+    setLoading(true);
     if (currentUser) {
-      getUser();
+      setLoading(true);
+      await getUser();
     }
-    getPopularPodcast();
-    getCommedyPodcasts();
-    getHorrorPodcasts();
-    getCommedyPodcasts();
-    getCrimePodcasts();
-    getSportsPodcasts();
+    await getPopularPodcast();
+    await getCommedyPodcasts();
+    await getNewsPodcasts();
+    await getCommedyPodcasts();
+    await getCrimePodcasts();
+    await getSportsPodcasts();
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getallData();
   }, [currentUser]);
 
   return (
     <DashboardMain>
-      {currentUser && user?.podcasts.length > 0 && (
-        <FilterContainer box={true}>
-          <Topic>
-            Your Uploads
-            <Span>Show All</Span>
-          </Topic>
-          <Podcasts>
-            {user?.podcasts.slice(0, 6).map((podcast) => (
-              <PodcastCard podcast={podcast} user={user} />
-            ))}
-          </Podcasts>
-        </FilterContainer>
+      {loading ? (
+        <Loader>
+          <CircularProgress />
+        </Loader>
+      ) : (
+        <>
+          {currentUser && user?.podcasts?.length > 0 && (
+            <FilterContainer box={true}>
+              <Topic>
+                Your Uploads
+                <Link to={`/profile`} style={{ textDecoration: 'none' }}>
+                  <Span>Show All</Span>
+                </Link>
+              </Topic>
+              <Podcasts>
+                {user?.podcasts.slice(0, 10).map((podcast) => (
+                  <PodcastCard
+                    podcast={podcast}
+                    user={user}
+                    setSignInOpen={setSignInOpen}
+                  />
+                ))}
+              </Podcasts>
+            </FilterContainer>
+          )}
+          <FilterContainer>
+            <Topic>
+              Most Popular
+              <Link
+                to={`/showpodcasts/mostpopular`}
+                style={{ textDecoration: 'none' }}
+              >
+                <Span>Show All</Span>
+              </Link>
+            </Topic>
+            <Podcasts>
+              {mostPopular.slice(0, 10).map((podcast) => (
+                <PodcastCard
+                  podcast={podcast}
+                  user={user}
+                  setSignInOpen={setSignInOpen}
+                />
+              ))}
+            </Podcasts>
+          </FilterContainer>
+          <FilterContainer>
+            <Topic>
+              Comedy
+              <Link
+                to={`/showpodcasts/comedy`}
+                style={{ textDecoration: 'none' }}
+              >
+                <Span>Show All</Span>
+              </Link>
+            </Topic>
+            <Podcasts>
+              {comedy.slice(0, 10).map((podcast) => (
+                <PodcastCard
+                  podcast={podcast}
+                  user={user}
+                  setSignInOpen={setSignInOpen}
+                />
+              ))}
+            </Podcasts>
+          </FilterContainer>
+          <FilterContainer>
+            <Link to={`/showpodcasts/news`} style={{ textDecoration: 'none' }}>
+              <Topic>
+                News
+                <Span>Show All</Span>
+              </Topic>
+            </Link>
+            <Podcasts>
+              {news.slice(0, 10).map((podcast) => (
+                <PodcastCard
+                  podcast={podcast}
+                  user={user}
+                  setSignInOpen={setSignInOpen}
+                />
+              ))}
+            </Podcasts>
+          </FilterContainer>
+          <FilterContainer>
+            <Link to={`/showpodcasts/crime`} style={{ textDecoration: 'none' }}>
+              <Topic>
+                Crime
+                <Span>Show All</Span>
+              </Topic>
+            </Link>
+            <Podcasts>
+              {crime.slice(0, 10).map((podcast) => (
+                <PodcastCard
+                  podcast={podcast}
+                  user={user}
+                  setSignInOpen={setSignInOpen}
+                />
+              ))}
+            </Podcasts>
+          </FilterContainer>
+          <FilterContainer>
+            <Link
+              to={`/showpodcasts/sports`}
+              style={{ textDecoration: 'none' }}
+            >
+              <Topic>
+                Sports
+                <Span>Show All</Span>
+              </Topic>
+            </Link>
+            <Podcasts>
+              {sports.slice(0, 10).map((podcast) => (
+                <PodcastCard
+                  podcast={podcast}
+                  user={user}
+                  setSignInOpen={setSignInOpen}
+                />
+              ))}
+            </Podcasts>
+          </FilterContainer>
+        </>
       )}
-      <FilterContainer>
-        <Topic>
-          Most Popular
-          <Link
-            to={`/showpodcasts/mostpopular`}
-            style={{ textDecoration: 'none' }}
-          >
-            <Span>Show All</Span>
-          </Link>
-        </Topic>
-        <Podcasts>
-          {mostPopular.slice(0, 6).map((podcast) => (
-            <PodcastCard podcast={podcast} user={user} />
-          ))}
-        </Podcasts>
-      </FilterContainer>
-      <FilterContainer>
-        <Topic>
-          Comedy
-          <Link to={`/showpodcasts/comedy`} style={{ textDecoration: 'none' }}>
-            <Span>Show All</Span>
-          </Link>
-        </Topic>
-        <Podcasts>
-          {comedy.slice(0, 6).map((podcast) => (
-            <PodcastCard podcast={podcast} user={user} />
-          ))}
-        </Podcasts>
-      </FilterContainer>
-      <FilterContainer>
-        <Link to={`/showpodcast/horror`} style={{ textDecoration: 'none' }}>
-          <Topic>
-            Horror
-            <Span>Show All</Span>
-          </Topic>
-        </Link>
-        <Podcasts>
-          {horror.slice(0, 6).map((podcast) => (
-            <PodcastCard podcast={podcast} user={user} />
-          ))}
-        </Podcasts>
-      </FilterContainer>
-      <FilterContainer>
-        <Link to={`/showpodcast/crime`} style={{ textDecoration: 'none' }}>
-          <Topic>
-            Crime
-            <Span>Show All</Span>
-          </Topic>
-        </Link>
-        <Podcasts>
-          {crime.slice(0, 6).map((podcast) => (
-            <PodcastCard podcast={podcast} user={user} />
-          ))}
-        </Podcasts>
-      </FilterContainer>
-      <FilterContainer>
-        <Link to={`/showpodcast/sports`} style={{ textDecoration: 'none' }}>
-          <Topic>
-            Sports
-            <Span>Show All</Span>
-          </Topic>
-        </Link>
-        <Podcasts>
-          {sports.slice(0, 6).map((podcast) => (
-            <PodcastCard podcast={podcast} user={user} />
-          ))}
-        </Podcasts>
-      </FilterContainer>
     </DashboardMain>
   );
 };

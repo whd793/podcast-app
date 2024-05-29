@@ -5,14 +5,37 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useState } from 'react';
 import { IconButton } from '@mui/material';
 import { favoritePodcast } from '../api';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { openSignin } from '../redux/setSigninSlice';
+import HeadphonesIcon from '@mui/icons-material/Headphones';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+
+const PlayIcon = styled.div`
+  padding: 10px;
+  border-radius: 50%;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  background: #9000ff !important;
+  color: white !important;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  position: absolute !important;
+  top: 45%;
+  right: 10%;
+  display: none;
+  transition: all 0.4s ease-in-out;
+  box-shadow: 0 0 16px 4px #9000ff50 !important;
+`;
 
 const Card = styled(Link)`
+  position: relative;
   text-decoration: none;
   background-color: ${({ theme }) => theme.card};
-  height: 250px;
   max-width: 220px;
+  height: 280px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -26,6 +49,9 @@ const Card = styled(Link)`
     transition: all 0.4s ease-in-out;
     box-shadow: 0 0 18px 0 rgba(0, 0, 0, 0.3);
     filter: brightness(1.3);
+  }
+  &:hover ${PlayIcon} {
+    display: flex;
   }
 `;
 
@@ -61,12 +87,12 @@ const Description = styled.div`
 
 const CardImage = styled.img`
   object-fit: cover;
-  object-position: 100% 0;
-  width: 100%;
+  width: 220px;
   height: 140px;
   border-radius: 6px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
   &:hover {
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
   }
 `;
 const CardInformation = styled.div`
@@ -86,7 +112,7 @@ const MainInfo = styled.div`
 const CreatorInfo = styled.div`
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   gap: 8px;
   margin-top: 6px;
 `;
@@ -95,32 +121,40 @@ const CreatorName = styled.div`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  width: 100%;
   color: ${({ theme }) => theme.text_secondary};
 `;
 const TimePosted = styled.div`
-  padding-top: 0.6rem;
   color: ${({ theme }) => theme.text_secondary};
+`;
+
+const Views = styled.div`
+  font-size: 10px;
+  color: ${({ theme }) => theme.text_secondary};
+  width: max-content;
 `;
 const Favorite = styled(IconButton)`
   color: white;
-  bottom: 6px;
+  top: 8px;
   right: 6px;
   padding: 6px !important;
   border-radius: 50%;
+  z-index: 100;
   display: flex;
   align-items: center;
   background: ${({ theme }) => theme.text_secondary + 95} !important;
-  color: ${({ theme }) => theme.text_primary} !important;
+  color: white !important;
   position: absolute !important;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 0 16px 6px #222423 !important;
 `;
-export const PodcastCard = ({ podcast, user }) => {
+
+export const PodcastCard = ({ podcast, user, setSignInOpen }) => {
   const [favourite, setFavourite] = useState(false);
+  const dispatch = useDispatch();
 
   const token = localStorage.getItem('podstreamtoken');
 
   const favoritpodcast = async () => {
-    console.log(podcast._id.toString(), token);
     await favoritePodcast(podcast._id, token)
       .then((res) => {
         if (res.status === 200) {
@@ -139,37 +173,64 @@ export const PodcastCard = ({ podcast, user }) => {
     }
   }, [user]);
 
+  const navigate = useNavigate();
+  const { currentUser } = useSelector((state) => state.user);
+
   return (
     <Card to={`/podcast/${podcast._id}`}>
-      <Top>
-        <Favorite onClick={() => favoritpodcast()}>
-          {favourite ? (
-            <FavoriteIcon
-              style={{ color: '#E30022', width: '16px', height: '16px' }}
-            ></FavoriteIcon>
-          ) : (
-            <FavoriteIcon
-              style={{ width: '16px', height: '16px' }}
-            ></FavoriteIcon>
-          )}
-        </Favorite>
-        <CardImage src={podcast.thumbnail} />
-      </Top>
-      <CardInformation>
-        <MainInfo>
-          <Title>{podcast.name}</Title>
-          <Description>{podcast.desc}</Description>
-          <CreatorInfo>
-            <Avatar
-              src={podcast.creator.img}
-              style={{ width: '26px', height: '26px' }}
-            >
-              {podcast.creator.name?.charAt(0).toUpperCase()}
-            </Avatar>
-            <CreatorName>{podcast.creator.name}</CreatorName>
-          </CreatorInfo>
-        </MainInfo>
-      </CardInformation>
+      <div>
+        <Top>
+          <Link
+            onClick={() => {
+              if (!currentUser) {
+                dispatch(openSignin());
+              } else {
+                favoritpodcast();
+              }
+            }}
+          >
+            <Favorite>
+              {favourite ? (
+                <FavoriteIcon
+                  style={{ color: '#E30022', width: '16px', height: '16px' }}
+                ></FavoriteIcon>
+              ) : (
+                <FavoriteIcon
+                  style={{ width: '16px', height: '16px' }}
+                ></FavoriteIcon>
+              )}
+            </Favorite>
+          </Link>
+          <CardImage src={podcast.thumbnail} />
+        </Top>
+        <CardInformation>
+          <MainInfo>
+            <Title>{podcast.name}</Title>
+            <Description>{podcast.desc}</Description>
+            <CreatorInfo>
+              <div
+                style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+              >
+                <Avatar
+                  src={podcast.creator.img}
+                  style={{ width: '26px', height: '26px' }}
+                >
+                  {podcast.creator.name?.charAt(0).toUpperCase()}
+                </Avatar>
+                <CreatorName>{podcast.creator.name}</CreatorName>
+              </div>
+              <Views>• {podcast.views} Views</Views>
+            </CreatorInfo>
+          </MainInfo>
+        </CardInformation>
+      </div>
+      <PlayIcon>
+        {podcast?.type === 'video' ? (
+          <PlayArrowIcon style={{ width: '28px', height: '28px' }} />
+        ) : (
+          <HeadphonesIcon style={{ width: '28px', height: '28px' }} />
+        )}
+      </PlayIcon>
     </Card>
   );
 };

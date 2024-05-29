@@ -21,6 +21,7 @@ import validator from 'validator';
 import { googleSignIn, signUp } from '../api/index';
 import OTP from './OTP';
 import { useGoogleLogin } from '@react-oauth/google';
+import { closeSignin, openSignin } from '../redux/setSigninSlice';
 
 const Container = styled.div`
   width: 100%;
@@ -59,23 +60,23 @@ const OutlinedBox = styled.div`
   ${({ googleButton, theme }) =>
     googleButton &&
     `
-      user-select: none; 
-    gap: 16px;`}
+    user-select: none; 
+  gap: 16px;`}
   ${({ button, theme }) =>
     button &&
     `
-      user-select: none; 
-    border: none;
-      background: ${theme.button};
-      color: '${theme.text_secondary}';`}
-      ${({ activeButton, theme }) =>
+    user-select: none; 
+  border: none;
+    background: ${theme.button};
+    color: '${theme.text_secondary}';`}
+    ${({ activeButton, theme }) =>
     activeButton &&
     `
-      user-select: none; 
-    border: none;
-      background: ${theme.primary};
-      color: white;`}
-    margin: 3px 20px;
+    user-select: none; 
+  border: none;
+    background: ${theme.primary};
+    color: white;`}
+  margin: 3px 20px;
   font-size: 14px;
   display: flex;
   justify-content: center;
@@ -134,7 +135,7 @@ const Error = styled.div`
   ${({ error, theme }) =>
     error === '' &&
     `    display: none;
-      `}
+    `}
 `;
 
 const SignUp = ({ setSignUpOpen, setSignInOpen }) => {
@@ -176,7 +177,7 @@ const SignUp = ({ setSignUpOpen, setSignInOpen }) => {
             setLoading(false);
             setDisabled(false);
             setSignUpOpen(false);
-            setSignInOpen(false);
+            dispatch(closeSignin());
           } else {
             dispatch(loginFailure());
             setcredentialError(`${res.data.message}`);
@@ -202,7 +203,6 @@ const SignUp = ({ setSignUpOpen, setSignInOpen }) => {
     e.preventDefault();
     if (!disabled) {
       setOtpSent(true);
-      setOtpVerified(true);
     }
 
     if (name === '' || email === '' || password === '') {
@@ -309,6 +309,7 @@ const SignUp = ({ setSignUpOpen, setSignInOpen }) => {
         console.log(res);
         if (res.status === 200) {
           dispatch(loginSuccess(res.data));
+          dispatch(closeSignin());
           setSignUpOpen(false);
           dispatch(
             openSnackbar({
@@ -345,7 +346,7 @@ const SignUp = ({ setSignUpOpen, setSignInOpen }) => {
   const theme = useTheme();
   //ssetSignInOpen(false)
   return (
-    <Modal open={true} onClose={() => setSignInOpen(false)}>
+    <Modal open={true} onClose={() => dispatch(closeSignin())}>
       <Container>
         <Wrapper>
           <CloseRounded
@@ -453,7 +454,7 @@ const SignUp = ({ setSignUpOpen, setSignInOpen }) => {
             <Span
               onClick={() => {
                 setSignUpOpen(false);
-                setSignInOpen(true);
+                dispatch(openSignin());
               }}
               style={{
                 fontWeight: '500',

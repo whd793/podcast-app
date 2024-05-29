@@ -21,6 +21,9 @@ const SearchedCard = styled(Link)`
     box-shadow: 0 0 18px 0 rgba(0, 0, 0, 0.3);
     filter: brightness(1.3);
   }
+  @media (max-width: 768px) {
+    width: 290px;
+  }
 `;
 const PodcastImage = styled.img`
   object-fit: cover;
@@ -37,15 +40,27 @@ const PodcastTitle = styled.div`
 const UploadInfo = styled.div`
   display: flex;
   width: 80%;
-  gap: 30px;
+  gap: 12px;
 `;
 const Time = styled.div`
   color: ${({ theme }) => theme.text_secondary};
   font-size: 14px;
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
+  @media (max-width: 560px) {
+    font-size: 10px;
+  }
 `;
 const CreatorName = styled.div`
   color: ${({ theme }) => theme.text_primary};
   font-size: 14px;
+  @media (max-width: 768px) {
+    font-size: 12px;
+  }
+  @media (max-width: 560px) {
+    font-size: 10px;
+  }
 `;
 const Description = styled.div`
   color: ${({ theme }) => theme.text_secondary};
@@ -63,8 +78,11 @@ const TopResult = ({ podcast }) => {
       <PodcastImage src={podcast?.thumbnail} />
       <PodcastTitle>{podcast?.name}</PodcastTitle>
       <UploadInfo>
-        <Time>{format(podcast?.createdAt)}</Time>
-        <CreatorName>{podcast?.creator.name}</CreatorName>
+        <Time>• {podcast.views} Views</Time>
+        <Time>• {format(podcast?.createdAt)}</Time>
+        <CreatorName style={{ marginLeft: '18px' }}>
+          {podcast?.creator.name}
+        </CreatorName>
       </UploadInfo>
       <Description>{podcast?.desc}</Description>
     </SearchedCard>

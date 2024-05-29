@@ -1,12 +1,17 @@
 import { CloseRounded } from '@mui/icons-material';
 import { Modal } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import { useDispatch } from 'react-redux';
-import { closeVideoPlayer } from '../redux/videoplayerSlice';
+import {
+  closePlayer,
+  openPlayer,
+  setCurrentTime,
+} from '../redux/audioplayerSlice';
+import { openSnackbar } from '../redux/snackbarSlice';
 
 const Container = styled.div`
   width: 100%;
@@ -19,6 +24,7 @@ const Container = styled.div`
   align-items: top;
   justify-content: center;
   overflow-y: scroll;
+  transition: all 0.5s ease;
 `;
 
 const Wrapper = styled.div`
@@ -49,6 +55,7 @@ const Videoplayer = styled.video`
   border-radius: 16px;
   margin: 0px 20px;
   object-fit: cover;
+  margin-top: 30px;
 `;
 
 const EpisodeName = styled.div`
@@ -89,35 +96,106 @@ const Btn = styled.div`
   }
 `;
 
-const VideoPlayer = ({ openvideo, videoepisode, videopodid }) => {
+const VideoPlayer = ({ episode, podid, currenttime, index }) => {
   const dispatch = useDispatch();
+  const videoref = useRef(null);
+
+  const handleTimeUpdate = () => {
+    const currentTime = videoref.current.currentTime;
+    dispatch(
+      setCurrentTime({
+        currenttime: currentTime,
+      })
+    );
+  };
+
+  const goToNextPodcast = () => {
+    //from the podid and index, get the next podcast
+    //dispatch the next podcast
+    if (podid.episodes.length === index + 1) {
+      dispatch(
+        openSnackbar({
+          message: 'This is the last episode',
+          severity: 'info',
+        })
+      );
+      return;
+    }
+    dispatch(closePlayer());
+    setTimeout(() => {
+      dispatch(
+        openPlayer({
+          type: 'video',
+          podid: podid,
+          index: index + 1,
+          currenttime: 0,
+          episode: podid.episodes[index + 1],
+        })
+      );
+    }, 10);
+  };
+
+  const goToPreviousPodcast = () => {
+    //from the podid and index, get the next podcast
+    //dispatch the next podcast
+    if (index === 0) {
+      dispatch(
+        openSnackbar({
+          message: 'This is the first episode',
+          severity: 'info',
+        })
+      );
+      return;
+    }
+    dispatch(closePlayer());
+    setTimeout(() => {
+      dispatch(
+        openPlayer({
+          type: 'video',
+          podid: podid,
+          index: index - 1,
+          currenttime: 0,
+          episode: podid.episodes[index - 1],
+        })
+      );
+    }, 10);
+  };
 
   return (
-    <Modal open={true} onClose={() => dispatch(closeVideoPlayer())}>
+    <Modal open={true} onClose={() => dispatch(closePlayer())}>
       <Container>
         <Wrapper>
           <CloseRounded
             style={{
               position: 'absolute',
-              top: '24px',
-              right: '30px',
+              top: '12px',
+              right: '20px',
               cursor: 'pointer',
             }}
             onClick={() => {
-              dispatch(closeVideoPlayer());
+              dispatch(closePlayer());
             }}
           />
-          <Videoplayer controls>
-            <source src={videoepisode.file} type='video/mp4' />
-            <source src={videoepisode.file} type='video/webm' />
-            <source src={videoepisode.file} type='video/ogg' />
+          <Videoplayer
+            controls
+            ref={videoref}
+            onTimeUpdate={handleTimeUpdate}
+            onEnded={() => goToNextPodcast()}
+            autoPlay
+            onPlay={() => {
+              videoref.current.currentTime = currenttime;
+            }}
+          >
+            <source src={episode.file} type='video/mp4' />
+            <source src={episode.file} type='video/webm' />
+            <source src={episode.file} type='video/ogg' />
             Your browser does not support the video tag.
           </Videoplayer>
-          <EpisodeName>{videoepisode.name}</EpisodeName>
-          <EpisodeDescription>{videoepisode.desc}</EpisodeDescription>
+          <EpisodeName>{episode.name}</EpisodeName>
+          <EpisodeDescription>{episode.desc}</EpisodeDescription>
           <BtnContainer>
-            <Btn>Previous</Btn>
-            <Btn>Next</Btn>
+            <Btn onClick={() => goToPreviousPodcast()}>Previous</Btn>
+            <Btn onClick={() => goToNextPodcast()}>Next</Btn>
           </BtnContainer>
         </Wrapper>
       </Container>

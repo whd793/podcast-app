@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { format } from 'timeago.js';
 
 const Results = styled(Link)`
   background-color: ${({ theme }) => theme.bgLight};
-  width: 700px;
   display: flex;
   align-items: center;
   padding: 8px;
@@ -19,8 +19,14 @@ const Results = styled(Link)`
   }
 `;
 const PodcastImage = styled.img`
-  height: 70px;
-  border-radius: 4px;
+  height: 80px;
+  border-radius: 8px;
+  width: 150px;
+  object-fit: cover;
+  @media (max-width: 768px) {
+    height: 60px;
+    width: 100px;
+  }
 `;
 const PodcastInfo = styled.div`
   display: flex;
@@ -35,14 +41,35 @@ const PodcastName = styled.div`
 const Creator = styled.div`
   color: ${({ theme }) => theme.text_secondary};
   font-size: 12px;
+  @media (max-width: 768px) {
+    font-size: 10px;
+  }
 `;
+const Time = styled.div`
+  color: ${({ theme }) => theme.text_secondary};
+  font-size: 12px;
+  @media (max-width: 768px) {
+    font-size: 10px;
+  }
+`;
+const Desciption = styled.div`
+  display: flex;
+  gap: 8px;
+`;
+
 const MoreResult = ({ podcast }) => {
   return (
-    <Results to={`/podcast/${podcast?._id}`}>
+    <Results to={`/podcast/${podcast?._id}`} style={{ textDecoration: 'none' }}>
       <PodcastImage src={podcast?.thumbnail} />
       <PodcastInfo>
         <PodcastName>{podcast?.name}</PodcastName>
-        <Creator>{podcast?.creator.name}</Creator>
+        <Desciption>
+          <Creator style={{ marginRight: '12px' }}>
+            {podcast?.creator.name}
+          </Creator>
+          <Time>• {podcast?.views} Views</Time>
+          <Time>• {format(podcast?.createdAt)}</Time>
+        </Desciption>
       </PodcastInfo>
     </Results>
   );

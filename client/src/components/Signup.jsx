@@ -18,9 +18,9 @@ import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import CircularProgress from '@mui/material/CircularProgress';
 import validator from 'validator';
-import { googleSignIn, signUp } from '../api/index';
+import { signUp } from '../api/index';
 import OTP from './OTP';
-import { useGoogleLogin } from '@react-oauth/google';
+// import { useGoogleLogin } from '@react-oauth/google';
 import { closeSignin, openSignin } from '../redux/setSigninSlice';
 
 const Container = styled.div`
@@ -203,6 +203,8 @@ const SignUp = ({ setSignUpOpen, setSignInOpen }) => {
     e.preventDefault();
     if (!disabled) {
       setOtpSent(true);
+      // testing purposes due to google cloud sign-in issue
+      setOtpVerified(true);
     }
 
     if (name === '' || email === '' || password === '') {
@@ -284,64 +286,64 @@ const SignUp = ({ setSignUpOpen, setSignInOpen }) => {
   };
 
   //Google SignIn
-  const googleLogin = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      setLoading(true);
-      const user = await axios
-        .get('https://www.googleapis.com/oauth2/v3/userinfo', {
-          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
-        })
-        .catch((err) => {
-          dispatch(loginFailure());
-          dispatch(
-            openSnackbar({
-              message: err.message,
-              severity: 'error',
-            })
-          );
-        });
+  // const googleLogin = useGoogleLogin({
+  //   onSuccess: async (tokenResponse) => {
+  //     setLoading(true);
+  //     const user = await axios
+  //       .get('https://www.googleapis.com/oauth2/v3/userinfo', {
+  //         headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+  //       })
+  //       .catch((err) => {
+  //         dispatch(loginFailure());
+  //         dispatch(
+  //           openSnackbar({
+  //             message: err.message,
+  //             severity: 'error',
+  //           })
+  //         );
+  //       });
 
-      googleSignIn({
-        name: user.data.name,
-        email: user.data.email,
-        img: user.data.picture,
-      }).then((res) => {
-        console.log(res);
-        if (res.status === 200) {
-          dispatch(loginSuccess(res.data));
-          dispatch(closeSignin());
-          setSignUpOpen(false);
-          dispatch(
-            openSnackbar({
-              message: 'Logged In Successfully',
-              severity: 'success',
-            })
-          );
+  //     googleSignIn({
+  //       name: user.data.name,
+  //       email: user.data.email,
+  //       img: user.data.picture,
+  //     }).then((res) => {
+  //       console.log(res);
+  //       if (res.status === 200) {
+  //         dispatch(loginSuccess(res.data));
+  //         dispatch(closeSignin());
+  //         setSignUpOpen(false);
+  //         dispatch(
+  //           openSnackbar({
+  //             message: 'Logged In Successfully',
+  //             severity: 'success',
+  //           })
+  //         );
 
-          setLoading(false);
-        } else {
-          dispatch(loginFailure(res.data));
-          dispatch(
-            openSnackbar({
-              message: res.data.message,
-              severity: 'error',
-            })
-          );
-          setLoading(false);
-        }
-      });
-    },
-    onError: (errorResponse) => {
-      dispatch(loginFailure());
-      dispatch(
-        openSnackbar({
-          message: errorResponse.error,
-          severity: 'error',
-        })
-      );
-      setLoading(false);
-    },
-  });
+  //         setLoading(false);
+  //       } else {
+  //         dispatch(loginFailure(res.data));
+  //         dispatch(
+  //           openSnackbar({
+  //             message: res.data.message,
+  //             severity: 'error',
+  //           })
+  //         );
+  //         setLoading(false);
+  //       }
+  //     });
+  //   },
+  //   onError: (errorResponse) => {
+  //     dispatch(loginFailure());
+  //     dispatch(
+  //       openSnackbar({
+  //         message: errorResponse.error,
+  //         severity: 'error',
+  //       })
+  //     );
+  //     setLoading(false);
+  //   },
+  // });
 
   const theme = useTheme();
   //ssetSignInOpen(false)
@@ -362,7 +364,7 @@ const SignUp = ({ setSignUpOpen, setSignInOpen }) => {
           {!otpSent ? (
             <>
               <Title>Sign Up</Title>
-              <OutlinedBox
+              {/* <OutlinedBox
                 googleButton={TroubleshootRounded}
                 style={{ margin: '24px' }}
                 onClick={() => googleLogin()}
@@ -375,7 +377,7 @@ const SignUp = ({ setSignUpOpen, setSignInOpen }) => {
                     Sign In with Google
                   </>
                 )}
-              </OutlinedBox>
+              </OutlinedBox> */}
               <Divider>
                 <Line />
                 or

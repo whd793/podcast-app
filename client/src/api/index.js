@@ -1,7 +1,8 @@
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
-//https://podstream.onrender.com/api
-const API = axios.create({ baseURL: `https://podstream.onrender.com/api` });
+//https://.com/api
+// const API = axios.create({ baseURL: `https://podcastaudio.com/api` });
+const API = axios.create({ baseURL: `http://localhost:8700/api/` });
 
 //auth
 export const signIn = async ({ email, password }) =>
@@ -12,12 +13,12 @@ export const signUp = async ({ name, email, password }) =>
     email,
     password,
   });
-export const googleSignIn = async ({ name, email, img }) =>
-  await API.post('/auth/google', {
-    name,
-    email,
-    img,
-  });
+// export const googleSignIn = async ({ name, email, img }) =>
+//   await API.post('/auth/google', {
+//     name,
+//     email,
+//     img,
+//   });
 export const findUserByEmail = async (email) =>
   await API.get(`/auth/findbyemail?email=${email}`);
 export const generateOtp = async (email, name, reason) =>

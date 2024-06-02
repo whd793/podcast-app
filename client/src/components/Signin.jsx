@@ -17,12 +17,12 @@ import { useDispatch } from 'react-redux';
 import validator from 'validator';
 import {
   signIn,
-  googleSignIn,
+  // googleSignIn,
   findUserByEmail,
   resetPassword,
 } from '../api/index';
 import OTP from './OTP';
-import { useGoogleLogin } from '@react-oauth/google';
+// import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import { closeSignin } from '../redux/setSigninSlice';
 
@@ -362,62 +362,62 @@ const SignIn = ({ setSignInOpen, setSignUpOpen }) => {
   }, [otpVerified]);
 
   //Google SignIn
-  const googleLogin = useGoogleLogin({
-    onSuccess: async (tokenResponse) => {
-      setLoading(true);
-      const user = await axios
-        .get('https://www.googleapis.com/oauth2/v3/userinfo', {
-          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
-        })
-        .catch((err) => {
-          dispatch(loginFailure());
-          dispatch(
-            openSnackbar({
-              message: err.message,
-              severity: 'error',
-            })
-          );
-        });
+  // const googleLogin = useGoogleLogin({
+  //   onSuccess: async (tokenResponse) => {
+  //     setLoading(true);
+  //     const user = await axios
+  //       .get('https://www.googleapis.com/oauth2/v3/userinfo', {
+  //         headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+  //       })
+  //       .catch((err) => {
+  //         dispatch(loginFailure());
+  //         dispatch(
+  //           openSnackbar({
+  //             message: err.message,
+  //             severity: 'error',
+  //           })
+  //         );
+  //       });
 
-      googleSignIn({
-        name: user.data.name,
-        email: user.data.email,
-        img: user.data.picture,
-      }).then((res) => {
-        console.log(res);
-        if (res.status === 200) {
-          dispatch(loginSuccess(res.data));
-          dispatch(closeSignin());
-          dispatch(
-            openSnackbar({
-              message: 'Logged In Successfully',
-              severity: 'success',
-            })
-          );
-          setLoading(false);
-        } else {
-          dispatch(loginFailure(res.data));
-          dispatch(
-            openSnackbar({
-              message: res.data.message,
-              severity: 'error',
-            })
-          );
-          setLoading(false);
-        }
-      });
-    },
-    onError: (errorResponse) => {
-      dispatch(loginFailure());
-      setLoading(false);
-      dispatch(
-        openSnackbar({
-          message: errorResponse.error,
-          severity: 'error',
-        })
-      );
-    },
-  });
+  //     googleSignIn({
+  //       name: user.data.name,
+  //       email: user.data.email,
+  //       img: user.data.picture,
+  //     }).then((res) => {
+  //       console.log(res);
+  //       if (res.status === 200) {
+  //         dispatch(loginSuccess(res.data));
+  //         dispatch(closeSignin());
+  //         dispatch(
+  //           openSnackbar({
+  //             message: 'Logged In Successfully',
+  //             severity: 'success',
+  //           })
+  //         );
+  //         setLoading(false);
+  //       } else {
+  //         dispatch(loginFailure(res.data));
+  //         dispatch(
+  //           openSnackbar({
+  //             message: res.data.message,
+  //             severity: 'error',
+  //           })
+  //         );
+  //         setLoading(false);
+  //       }
+  //     });
+  //   },
+  //   onError: (errorResponse) => {
+  //     dispatch(loginFailure());
+  //     setLoading(false);
+  //     dispatch(
+  //       openSnackbar({
+  //         message: errorResponse.error,
+  //         severity: 'error',
+  //       })
+  //     );
+  //   },
+  // });
 
   return (
     <Modal open={true} onClose={() => dispatch(closeSignin())}>
@@ -435,7 +435,7 @@ const SignIn = ({ setSignInOpen, setSignUpOpen }) => {
             />
             <>
               <Title>Sign In</Title>
-              <OutlinedBox
+              {/* <OutlinedBox
                 googleButton={TroubleshootRounded}
                 style={{ margin: '24px' }}
                 onClick={() => googleLogin()}
@@ -448,7 +448,7 @@ const SignIn = ({ setSignInOpen, setSignUpOpen }) => {
                     Sign In with Google
                   </>
                 )}
-              </OutlinedBox>
+              </OutlinedBox> */}
               <Divider>
                 <Line />
                 or

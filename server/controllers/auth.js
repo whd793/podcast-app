@@ -87,38 +87,38 @@ export const signin = async (req, res, next) => {
   }
 };
 
-export const googleAuthSignIn = async (req, res, next) => {
-  try {
-    const user = await User.findOne({ email: req.body.email });
+// export const googleAuthSignIn = async (req, res, next) => {
+//   try {
+//     const user = await User.findOne({ email: req.body.email });
 
-    if (!user) {
-      try {
-        const user = new User({ ...req.body, googleSignIn: true });
-        await user.save();
-        const token = jwt.sign({ id: user._id }, process.env.JWT, {
-          expiresIn: '9999 years',
-        });
-        res.status(200).json({ token, user: user });
-      } catch (err) {
-        next(err);
-      }
-    } else if (user.googleSignIn) {
-      const token = jwt.sign({ id: user._id }, process.env.JWT, {
-        expiresIn: '9999 years',
-      });
-      res.status(200).json({ token, user });
-    } else if (user.googleSignIn === false) {
-      return next(
-        createError(
-          201,
-          "User already exists with this email can't do google auth"
-        )
-      );
-    }
-  } catch (err) {
-    next(err);
-  }
-};
+//     if (!user) {
+//       try {
+//         const user = new User({ ...req.body, googleSignIn: true });
+//         await user.save();
+//         const token = jwt.sign({ id: user._id }, process.env.JWT, {
+//           expiresIn: '9999 years',
+//         });
+//         res.status(200).json({ token, user: user });
+//       } catch (err) {
+//         next(err);
+//       }
+//     } else if (user.googleSignIn) {
+//       const token = jwt.sign({ id: user._id }, process.env.JWT, {
+//         expiresIn: '9999 years',
+//       });
+//       res.status(200).json({ token, user });
+//     } else if (user.googleSignIn === false) {
+//       return next(
+//         createError(
+//           201,
+//           "User already exists with this email can't do google auth"
+//         )
+//       );
+//     }
+//   } catch (err) {
+//     next(err);
+//   }
+// };
 
 export const logout = (req, res) => {
   res.clearCookie('access_token').json({ message: 'Logged out' });

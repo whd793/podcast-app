@@ -26,8 +26,6 @@ import { openSnackbar } from '../redux/snackbarSlice';
 import { createPodcast } from '../api';
 import { Category } from '../utils/Data';
 
-import s3 from '../config/aws-config';
-
 const Container = styled.div`
   width: 100%;
   height: 100%;
@@ -245,99 +243,39 @@ const Upload = ({ setUploadOpen }) => {
     }
   }, [podcast]);
 
-  // const uploadFile = (file, index) => {
-  //   const storage = getStorage(app);
-  //   const fileName = new Date().getTime() + file.name;
-  //   const storageRef = ref(storage, fileName);
-  //   const uploadTask = uploadBytesResumable(storageRef, file);
-
-  //   uploadTask.on(
-  //     'state_changed',
-  //     (snapshot) => {
-  //       const progress =
-  //         (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-  //       podcast.episodes[index].file.uploadProgress = Math.round(progress);
-  //       setPodcast({ ...podcast, episodes: podcast.episodes });
-  //       switch (snapshot.state) {
-  //         case 'paused':
-  //           console.log('Upload is paused');
-  //           break;
-  //         case 'running':
-  //           console.log('Upload is running');
-  //           break;
-  //         default:
-  //           break;
-  //       }
-  //     },
-  //     (error) => {},
-  //     () => {
-  //       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-  //         const newEpisodes = podcast.episodes;
-  //         newEpisodes[index].file = downloadURL;
-  //         setPodcast({ ...podcast, episodes: newEpisodes });
-  //       });
-  //     }
-  //   );
-  // };
-
-  // const uploadFile = (file, index) => {
-  //   const fileName = `${new Date().getTime()}_${file.name}`;
-  //   const params = {
-  //     Bucket: process.env.AWS_S3_BUCKET_NAME, // Your S3 bucket name
-  //     Key: fileName, // File name you want to save as in S3
-  //     Body: file,
-  //     ContentType: file.type,
-  //   };
-
-  //   const upload = s3.upload(params);
-
-  //   upload.on('httpUploadProgress', (event) => {
-  //     const progress = Math.round((event.loaded / event.total) * 100);
-  //     podcast.episodes[index].file.uploadProgress = progress;
-  //     setPodcast({ ...podcast, episodes: podcast.episodes });
-  //   });
-
-  //   upload.send((err, data) => {
-  //     if (err) {
-  //       console.error('There was an error uploading your file: ', err);
-  //       return;
-  //     }
-  //     const newEpisodes = podcast.episodes;
-  //     newEpisodes[index].file = data.Location; // S3 file URL
-  //     setPodcast({ ...podcast, episodes: newEpisodes });
-  //   });
-  // };
-
   const uploadFile = (file, index) => {
-    const fileName = `${new Date().getTime()}_${file.name}`;
-    const bucketName = process.env.REACT_APP_AWS_S3_BUCKET_NAME;
+    const storage = getStorage(app);
+    const fileName = new Date().getTime() + file.name;
+    const storageRef = ref(storage, fileName);
+    const uploadTask = uploadBytesResumable(storageRef, file);
 
-    console.log('Bucket Name:', bucketName); // Debug line
-
-    const params = {
-      Bucket: bucketName, // Ensure this is not undefined or empty
-      Key: fileName, // File name you want to save as in S3
-      Body: file,
-      ContentType: file.type,
-    };
-
-    const upload = s3.upload(params);
-
-    upload.on('httpUploadProgress', (event) => {
-      const progress = Math.round((event.loaded / event.total) * 100);
-      podcast.episodes[index].file.uploadProgress = progress;
-      setPodcast({ ...podcast, episodes: podcast.episodes });
-    });
-
-    upload.send((err, data) => {
-      if (err) {
-        console.error('There was an error uploading your file: ', err);
-        return;
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        podcast.episodes[index].file.uploadProgress = Math.round(progress);
+        setPodcast({ ...podcast, episodes: podcast.episodes });
+        switch (snapshot.state) {
+          case 'paused':
+            console.log('Upload is paused');
+            break;
+          case 'running':
+            console.log('Upload is running');
+            break;
+          default:
+            break;
+        }
+      },
+      (error) => {},
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          const newEpisodes = podcast.episodes;
+          newEpisodes[index].file = downloadURL;
+          setPodcast({ ...podcast, episodes: newEpisodes });
+        });
       }
-      const newEpisodes = podcast.episodes;
-      newEpisodes[index].file = data.Location; // S3 file URL
-      setPodcast({ ...podcast, episodes: newEpisodes });
-    });
+    );
   };
 
   const createpodcast = async () => {
@@ -374,7 +312,6 @@ const Upload = ({ setUploadOpen }) => {
   };
 
   useEffect(() => {
-    console.log('b' + process.env.REACT_APP_AWS_S3_BUCKET_NAME);
     if (
       podcast.episodes.length > 0 &&
       podcast.episodes.every(

@@ -8,9 +8,10 @@
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
-  "author": "rishav",
+  "author": "wonhee",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.1671.0",
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",

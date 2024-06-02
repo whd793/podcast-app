@@ -14,16 +14,10 @@ dotenv.config();
 
 /** Middlewares */
 app.use(express.json());
-// const corsConfig = {
-//   credentials: true,
-//   origin: true,
-// };
-
 const corsConfig = {
-  origin: 'http://localhost:3000', // Allow requests from this origin
-  credentials: true, // Allow cookies to be sent
+  credentials: true,
+  origin: true,
 };
-
 app.use(cors(corsConfig));
 // app.use(morgan('tiny'));
 // app.disable('x-powered-by');

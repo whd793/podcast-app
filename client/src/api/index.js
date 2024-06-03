@@ -2,7 +2,9 @@ import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 //https://.com/api
 // const API = axios.create({ baseURL: `https://podcastaudio.com/api` });
-const API = axios.create({ baseURL: `http://localhost:8700/api/` });
+const API = axios.create({
+  baseURL: `https://afternoon-dusk-19178-97344a4392a5.herokuapp.com/api/`,
+});
 
 //auth
 export const signIn = async ({ email, password }) =>

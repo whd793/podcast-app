@@ -312,7 +312,7 @@ const Upload = ({ setUploadOpen }) => {
     const fileName = `${new Date().getTime()}_${file.name}`;
     const bucketName = process.env.REACT_APP_AWS_S3_BUCKET_NAME;
 
-    console.log('Bucket Name:', bucketName); // Debug line
+    // console.log('Bucket Name:', bucketName); // Debug line
 
     const params = {
       Bucket: bucketName, // Ensure this is not undefined or empty
@@ -320,6 +320,8 @@ const Upload = ({ setUploadOpen }) => {
       Body: file,
       ContentType: file.type,
     };
+
+    console.log(params);
 
     const upload = s3.upload(params);
 

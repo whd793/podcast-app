@@ -202,8 +202,9 @@ const SignUp = ({ setSignUpOpen, setSignInOpen }) => {
   const handleSignUp = async (e) => {
     e.preventDefault();
     if (!disabled) {
-      setOtpSent(true);
+      // setOtpSent(true);
       // testing purposes due to google cloud sign-in issue
+      setOtpSent(false);
       setOtpVerified(true);
     }
 

@@ -449,11 +449,11 @@ const SignIn = ({ setSignInOpen, setSignUpOpen }) => {
                   </>
                 )}
               </OutlinedBox> */}
-              <Divider>
+              {/* <Divider>
                 <Line />
                 or
                 <Line />
-              </Divider>
+              </Divider> */}
               <OutlinedBox style={{ marginTop: '24px' }}>
                 <EmailRounded
                   sx={{ fontSize: '20px' }}

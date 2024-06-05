@@ -13,6 +13,9 @@ server/.env
 
 # production
 /build
+# production
+client/build
+
 
 # misc
 .env

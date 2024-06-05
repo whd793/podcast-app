@@ -1,5 +1,6 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import path from 'path';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import morgan from 'morgan';
@@ -74,6 +75,13 @@ app.use((err, req, res, next) => {
     message,
   });
 });
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('client/build'));
+  app.get('*', (req, res) => {
+    res.sendFile(__dirname, 'client', 'build', 'index.html');
+  });
+}
 
 app.listen(port, () => {
   console.log('Connected');

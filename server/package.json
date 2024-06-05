@@ -4,9 +4,14 @@
   "description": "",
   "main": "index.js",
   "type": "module",
+  "engine": {
+    "node": "20.9.0",
+    "npm": "10.1.0"
+  },
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "author": "wonhee",
   "license": "ISC",
@@ -21,6 +26,7 @@
     "morgan": "^1.10.0",
     "nodemailer": "^6.9.1",
     "nodemon": "^2.0.22",
-    "otp-generator": "^4.0.1"
+    "otp-generator": "^4.0.1",
+    "path": "^0.12.7"
   }
 }

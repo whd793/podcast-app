@@ -19,6 +19,39 @@ const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
 });
 
+export const kakaoAuthSignIn = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+
+    if (!user) {
+      try {
+        const user = new User({ ...req.body, kakaoSignIn: true });
+        await user.save();
+        const token = jwt.sign({ id: user._id }, process.env.JWT, {
+          expiresIn: '9999 years',
+        });
+        res.status(200).json({ token, user: user });
+      } catch (err) {
+        next(err);
+      }
+    } else if (user.kakaoSignIn) {
+      const token = jwt.sign({ id: user._id }, process.env.JWT, {
+        expiresIn: '9999 years',
+      });
+      res.status(200).json({ token, user });
+    } else if (user.kakaoSignIn === false) {
+      return next(
+        createError(
+          201,
+          "User already exists with this email can't do Kakao auth"
+        )
+      );
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const signup = async (req, res, next) => {
   const { email } = req.body;
   // Check we have an email

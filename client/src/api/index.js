@@ -4,7 +4,15 @@ import jwt_decode from 'jwt-decode';
 // const API = axios.create({ baseURL: `https://podcastaudio.com/api` });
 const API = axios.create({
   baseURL: `https://podcast-app-sgmt.onrender.com/api`,
+  // baseURL: `http://localhost:8700/api`,
 });
+
+export const kakaoSignIn = async ({ name, email, img }) =>
+  await API.post('/auth/kakao', {
+    name,
+    email,
+    img,
+  });
 
 //auth
 export const signIn = async ({ email, password }) =>

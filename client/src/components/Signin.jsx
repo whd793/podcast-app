@@ -22,9 +22,11 @@ import {
   resetPassword,
 } from '../api/index';
 import OTP from './OTP';
+import { kakaoSignIn } from '../api/index';
 // import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import { closeSignin } from '../redux/setSigninSlice';
+import KakaoLogin from 'react-kakao-login';
 
 const Container = styled.div`
   width: 100%;
@@ -184,6 +186,45 @@ const SignIn = ({ setSignInOpen, setSignUpOpen }) => {
       setDisabled(true);
     }
   }, [email, password]);
+
+  const kakaoClientId = process.env.REACT_APP_KAKAO_KEY; // 카카오 개발자 콘솔에서 얻은 클라이언트 ID
+
+  const handleKakaoSuccess = (data) => {
+    kakaoSignIn({
+      name: data.profile.properties.nickname,
+      email: data.profile.kakao_account.email,
+      img: data.profile.properties.profile_image,
+    }).then((res) => {
+      if (res.status === 200) {
+        dispatch(loginSuccess(res.data));
+        dispatch(closeSignin());
+        dispatch(
+          openSnackbar({
+            message: 'Logged In Successfully with Kakao',
+            severity: 'success',
+          })
+        );
+      } else {
+        dispatch(loginFailure(res.data));
+        dispatch(
+          openSnackbar({
+            message: res.data.message,
+            severity: 'error',
+          })
+        );
+      }
+    });
+  };
+
+  const handleKakaoFail = (err) => {
+    dispatch(loginFailure());
+    dispatch(
+      openSnackbar({
+        message: err.message,
+        severity: 'error',
+      })
+    );
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -435,6 +476,20 @@ const SignIn = ({ setSignInOpen, setSignUpOpen }) => {
             />
             <>
               <Title>Sign In</Title>
+              <KakaoLogin
+                token={kakaoClientId}
+                onSuccess={handleKakaoSuccess}
+                onFail={handleKakaoFail}
+                render={({ onClick }) => (
+                  <OutlinedBox
+                    googleButton={true}
+                    style={{ margin: '24px' }}
+                    onClick={onClick}
+                  >
+                    Sign In with Kakao
+                  </OutlinedBox>
+                )}
+              />
               {/* <OutlinedBox
                 googleButton={TroubleshootRounded}
                 style={{ margin: '24px' }}

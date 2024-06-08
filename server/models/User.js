@@ -36,6 +36,10 @@ const UserSchema = new mongoose.Schema(
       ref: 'Podcasts',
       default: [],
     },
+    kakaoSignIn: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

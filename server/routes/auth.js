@@ -10,8 +10,11 @@ import {
   resetPassword,
 } from '../controllers/auth.js';
 import { localVariables } from '../middleware/auth.js';
+import { kakaoAuthSignIn } from '../controllers/auth.js';
 
 const router = express.Router();
+
+router.post('/kakao', kakaoAuthSignIn);
 
 //create a user
 router.post('/signup', signup);

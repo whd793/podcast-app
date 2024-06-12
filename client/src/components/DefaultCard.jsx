@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-
+import { useTranslation } from 'react-i18next';
 const Card = styled.div`
   width: 150px;
   height: 150px;
@@ -37,9 +37,10 @@ const FlexContainer = styled.div`
   align-items: flex-end;
 `;
 export const DefaultCard = ({ category }) => {
+  const { t } = useTranslation();
   return (
     <Card style={{ 'background-color': `${category.color}` }}>
-      <DefaultCardText>{category.name}</DefaultCardText>
+      <DefaultCardText>{t(category.name)}</DefaultCardText>
       <FlexContainer>
         <DefaultCardImg src={category.img} alt='podcast-image' />
       </FlexContainer>

@@ -24,6 +24,8 @@ import OTP from './OTP';
 import { closeSignin, openSignin } from '../redux/setSigninSlice';
 import { kakaoSignIn } from '../api/index';
 import KakaoLogin from 'react-kakao-login';
+import { useTranslation } from 'react-i18next';
+import LogoIcon from '../Images/kakao.png';
 
 const Container = styled.div`
   width: 100%;
@@ -140,6 +142,10 @@ const Error = styled.div`
     `}
 `;
 
+const Image = styled.img`
+  height: 30px;
+`;
+
 const SignUp = ({ setSignUpOpen, setSignInOpen }) => {
   const [nameValidated, setNameValidated] = useState(false);
   const [name, setName] = useState('');
@@ -155,6 +161,8 @@ const SignUp = ({ setSignUpOpen, setSignInOpen }) => {
     password: '',
     showPassword: false,
   });
+
+  const { t } = useTranslation();
 
   const [otpSent, setOtpSent] = useState(false);
   const [otpVerified, setOtpVerified] = useState(false);
@@ -405,7 +413,7 @@ const SignUp = ({ setSignUpOpen, setSignInOpen }) => {
           />
           {!otpSent ? (
             <>
-              <Title>Sign Up</Title>
+              <Title>{t('signup')}</Title>
               <KakaoLogin
                 token={kakaoClientId}
                 onSuccess={handleKakaoSuccess}
@@ -413,10 +421,16 @@ const SignUp = ({ setSignUpOpen, setSignInOpen }) => {
                 render={({ onClick }) => (
                   <OutlinedBox
                     googleButton={true}
-                    style={{ margin: '24px' }}
                     onClick={onClick}
+                    style={{
+                      margin: '24px',
+                      cursor: 'pointer',
+                      background: '#FEE500',
+                      color: '#000000',
+                    }}
                   >
-                    Sign In with Kakao
+                    <Image src={LogoIcon} />
+                    {t('signinwithkakao')}
                   </OutlinedBox>
                 )}
               />
@@ -445,7 +459,7 @@ const SignUp = ({ setSignUpOpen, setSignInOpen }) => {
                   style={{ paddingRight: '12px' }}
                 />
                 <TextInput
-                  placeholder='Full Name'
+                  placeholder={t('fullname')}
                   type='text'
                   onChange={(e) => setName(e.target.value)}
                 />
@@ -456,7 +470,7 @@ const SignUp = ({ setSignUpOpen, setSignInOpen }) => {
                   style={{ paddingRight: '12px' }}
                 />
                 <TextInput
-                  placeholder='Email Id'
+                  placeholder={t('emailid')}
                   type='email'
                   onChange={(e) => setEmail(e.target.value)}
                 />
@@ -469,7 +483,7 @@ const SignUp = ({ setSignUpOpen, setSignInOpen }) => {
                 />
                 <TextInput
                   type={values.showPassword ? 'text' : 'password'}
-                  placeholder='password'
+                  placeholder={t('password')}
                   onChange={(e) => setPassword(e.target.value)}
                 />
                 <IconButton
@@ -495,7 +509,7 @@ const SignUp = ({ setSignUpOpen, setSignInOpen }) => {
                 {Loading ? (
                   <CircularProgress color='inherit' size={20} />
                 ) : (
-                  'Create Account'
+                  t('createaccount')
                 )}
               </OutlinedBox>
             </>
@@ -508,7 +522,7 @@ const SignUp = ({ setSignUpOpen, setSignInOpen }) => {
             />
           )}
           <LoginText>
-            Already have an account ?
+            {t('alreadyhaveanaccount')}
             <Span
               onClick={() => {
                 setSignUpOpen(false);
@@ -520,7 +534,7 @@ const SignUp = ({ setSignUpOpen, setSignInOpen }) => {
                 cursor: 'pointer',
               }}
             >
-              Sign In
+              {t('signin')}
             </Span>
           </LoginText>
         </Wrapper>

@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { openSnackbar } from '../redux/snackbarSlice.jsx';
 import { CircularProgress } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const SearchMain = styled.div`
   padding: 20px 30px;
@@ -101,6 +102,7 @@ const Search = () => {
   const [searchedPodcasts, setSearchedPodcasts] = useState([]);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const handleChange = async (e) => {
     setSearchedPodcasts([]);
     setLoading(true);
@@ -143,7 +145,7 @@ const Search = () => {
       </div>
       {searched === '' ? (
         <Categories>
-          <Heading>Browse All</Heading>
+          <Heading>{t('browseall')}</Heading>
           <BrowseAll>
             {Category.map((category) => (
               <Link

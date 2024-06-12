@@ -17,7 +17,11 @@
   "password": "Password",
   "forgotpassword": "Forgot password?",
   "signin": "Sign in",
+  "signup": "Sign up",
   "donthaveanaccount": "Don't have an account",
+  "alreadyhaveanaccount": "Already have an account?",
   "createaccount": "Create Account",
-  "language": "Language:"
+  "language": "Language:",
+  "fullname": "Full Name",
+  "browseall": "Browse All"
 }

@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { openSnackbar } from '../redux/snackbarSlice';
 import { displayPodcastFailure } from '../redux/userSlice.jsx';
 import { CircularProgress } from '@mui/material';
-
+import { useTranslation } from 'react-i18next';
 const DisplayMain = styled.div`
   display: flex;
   padding: 30px 30px;
@@ -59,7 +59,7 @@ const DisplayPodcasts = () => {
   const [string, setString] = useState('');
   const dispatch = useDispatch();
   const [Loading, setLoading] = useState(false);
-
+  const { t } = useTranslation();
   const mostPopular = async () => {
     await getMostPopularPodcast()
       .then((res) => {
@@ -115,7 +115,14 @@ const DisplayPodcasts = () => {
   return (
     <DisplayMain>
       <Container>
-        <Topic>{string}</Topic>
+        <Topic>
+          {t(
+            typeof string == 'string'
+              ? string.replace(/\s+/g, '').toLowerCase()
+              : string.join('').replace(/\s+/g, '').toLowerCase()
+          )}
+        </Topic>
+
         {Loading ? (
           <Loader>
             <CircularProgress />

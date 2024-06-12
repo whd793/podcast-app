@@ -28,6 +28,7 @@ import axios from 'axios';
 import { closeSignin } from '../redux/setSigninSlice';
 import KakaoLogin from 'react-kakao-login';
 import { useTranslation } from 'react-i18next';
+import LogoIcon from '../Images/kakao.png';
 
 const Container = styled.div`
   width: 100%;
@@ -154,6 +155,10 @@ const ForgetPassword = styled.div`
   &:hover {
     color: ${({ theme }) => theme.primary};
   }
+`;
+
+const Image = styled.img`
+  height: 30px;
 `;
 
 const SignIn = ({ setSignInOpen, setSignUpOpen }) => {
@@ -478,7 +483,7 @@ const SignIn = ({ setSignInOpen, setSignUpOpen }) => {
               onClick={() => dispatch(closeSignin())}
             />
             <>
-              <Title>Sign In</Title>
+              <Title>{t('signin')}</Title>
               <KakaoLogin
                 token={kakaoClientId}
                 onSuccess={handleKakaoSuccess}
@@ -486,9 +491,15 @@ const SignIn = ({ setSignInOpen, setSignUpOpen }) => {
                 render={({ onClick }) => (
                   <OutlinedBox
                     googleButton={true}
-                    style={{ margin: '24px' }}
                     onClick={onClick}
+                    style={{
+                      margin: '24px',
+                      cursor: 'pointer',
+                      background: '#FEE500',
+                      color: '#000000',
+                    }}
                   >
+                    <Image src={LogoIcon} />
                     {t('signinwithkakao')}
                   </OutlinedBox>
                 )}
@@ -507,11 +518,11 @@ const SignIn = ({ setSignInOpen, setSignUpOpen }) => {
                   </>
                 )}
               </OutlinedBox> */}
-              {/* <Divider>
+              <Divider>
                 <Line />
                 or
                 <Line />
-              </Divider> */}
+              </Divider>
               <OutlinedBox style={{ marginTop: '24px' }}>
                 <EmailRounded
                   sx={{ fontSize: '20px' }}
@@ -553,12 +564,12 @@ const SignIn = ({ setSignInOpen, setSignUpOpen }) => {
                   setShowForgotPassword(true);
                 }}
               >
-                <b>Forgot password ?</b>
+                <b>{t('forgotpassword')} </b>
               </ForgetPassword>
               <OutlinedBox
                 button={true}
                 activeButton={!disabled}
-                style={{ marginTop: '6px' }}
+                style={{ marginTop: '6px', cursor: 'pointer' }}
                 onClick={handleLogin}
               >
                 {Loading ? (
@@ -569,7 +580,7 @@ const SignIn = ({ setSignInOpen, setSignUpOpen }) => {
               </OutlinedBox>
             </>
             <LoginText>
-              Don't have an account ?
+              {t('donthaveanaccount')}
               <Span
                 onClick={() => {
                   setSignUpOpen(true);
@@ -581,7 +592,7 @@ const SignIn = ({ setSignInOpen, setSignUpOpen }) => {
                   cursor: 'pointer',
                 }}
               >
-                Create Account
+                {t('createaccount')}
               </Span>
             </LoginText>
           </Wrapper>

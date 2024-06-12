@@ -36,5 +36,13 @@
   "delete": "Delete",
   "addepisode": "Add Episode",
   "back": "Back",
-  "create": "Create"
+  "create": "Create",
+  "culture": "Culture",
+  "business": "Business",
+  "education": "Education",
+  "health": "Health",
+  "science": "Science",
+  "religion": "Religion",
+  "development": "Development",
+  "history": "History"
 }

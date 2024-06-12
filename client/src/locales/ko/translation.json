@@ -48,5 +48,13 @@
   "delete": "지우기",
   "addepisode": "에피소드 추가하기",
   "back": "뒤로가기",
-  "create": "업로드"
+  "create": "업로드",
+  "culture": "문화",
+  "business": "비지니스",
+  "education": "교육",
+  "health": "헬스",
+  "science": "과학",
+  "religion": "종교",
+  "development": "개발",
+  "history": "역사"
 }

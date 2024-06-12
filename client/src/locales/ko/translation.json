@@ -35,5 +35,18 @@
   "Science": "과학",
   "Religion": "종교",
   "Development": "개발",
-  "History": "역사"
+  "History": "역사",
+  "youruploads": "내가 올린 오디오",
+  "yourfavorites": "내 즐겨찾기",
+  "uploadpodcast": "오디오 업로드",
+  "podcastname": "팟케스트 제목*",
+  "podcastdescription": "팟케스트 내용*",
+  "tagsseparated": "쉼표(,)로 나누어서 테그 추가. 예: 스포츠,코미디",
+  "selectcategory": "카테고리 선택",
+  "episodename": "에피소드 제목*",
+  "episodedescription": "에피소드 내용*",
+  "delete": "지우기",
+  "addepisode": "에피소드 추가하기",
+  "back": "뒤로가기",
+  "create": "업로드"
 }

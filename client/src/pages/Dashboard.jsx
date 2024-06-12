@@ -187,7 +187,7 @@ const Dashboard = ({ setSignInOpen }) => {
           {currentUser && user?.podcasts?.length > 0 && (
             <FilterContainer box={true}>
               <Topic>
-                Your Uploads
+                {t('youruploads')}
                 <Link to={`/profile`} style={{ textDecoration: 'none' }}>
                   <Span>{t('showall')}</Span>
                 </Link>

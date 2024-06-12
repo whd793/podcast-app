@@ -28,6 +28,8 @@ import { Category } from '../utils/Data';
 
 import s3 from '../config/aws-config';
 
+import { useTranslation } from 'react-i18next';
+
 const Container = styled.div`
   width: 100%;
   height: 100%;
@@ -208,6 +210,8 @@ const Upload = ({ setUploadOpen }) => {
   const [loading, setLoading] = React.useState(false);
 
   const dispatch = useDispatch();
+
+  const { t } = useTranslation();
 
   const token = localStorage.getItem('podstreamtoken');
 
@@ -409,7 +413,7 @@ const Upload = ({ setUploadOpen }) => {
             }}
             onClick={() => setUploadOpen(false)}
           />
-          <Title>Upload Podcast</Title>
+          <Title>{t('uploadpodcast')}</Title>
           {!showEpisode ? (
             <>
               <Label>Podcast Details:</Label>
@@ -417,7 +421,7 @@ const Upload = ({ setUploadOpen }) => {
               <ImageSelector podcast={podcast} setPodcast={setPodcast} />
               <OutlinedBox style={{ marginTop: '12px' }}>
                 <TextInput
-                  placeholder='Podcast Name*'
+                  placeholder={t('podcastname')}
                   type='text'
                   value={podcast?.name}
                   onChange={(e) =>
@@ -427,7 +431,7 @@ const Upload = ({ setUploadOpen }) => {
               </OutlinedBox>
               <OutlinedBox style={{ marginTop: '6px' }}>
                 <Desc
-                  placeholder='Podcast Description* '
+                  placeholder={t('podcastdescription')}
                   name='desc'
                   rows={5}
                   value={podcast?.desc}
@@ -438,7 +442,7 @@ const Upload = ({ setUploadOpen }) => {
               </OutlinedBox>
               <OutlinedBox style={{ marginTop: '6px' }}>
                 <Desc
-                  placeholder='Tags seperate by ,'
+                  placeholder={t('tagsseparated')}
                   name='tags'
                   rows={4}
                   value={podcast?.tags}
@@ -480,10 +484,12 @@ const Upload = ({ setUploadOpen }) => {
                     }
                   >
                     <Option value={Category[0].name} selected disabled hidden>
-                      Select Category
+                      {t('selectcategory')}
                     </Option>
                     {Category.map((category) => (
-                      <Option value={category.name}>{category.name}</Option>
+                      <Option value={category.name}>
+                        {t(category.name.toLowerCase())}{' '}
+                      </Option>
                     ))}
                   </Select>
                 </OutlinedBox>
@@ -560,7 +566,7 @@ const Upload = ({ setUploadOpen }) => {
                   />
                   <OutlinedBox>
                     <TextInput
-                      placeholder='Episode Name*'
+                      placeholder={t('episodename')}
                       type='text'
                       value={episode.name}
                       onChange={(e) => {
@@ -572,7 +578,7 @@ const Upload = ({ setUploadOpen }) => {
                   </OutlinedBox>
                   <OutlinedBox style={{ marginTop: '6px' }}>
                     <Desc
-                      placeholder='Episode Description* '
+                      placeholder={t('episodedescription')}
                       name='desc'
                       rows={5}
                       value={episode.desc}
@@ -596,7 +602,7 @@ const Upload = ({ setUploadOpen }) => {
                       })
                     }
                   >
-                    Delete
+                    {t('delete')}
                   </OutlinedBox>
                 </>
               ))}
@@ -614,7 +620,7 @@ const Upload = ({ setUploadOpen }) => {
                   })
                 }
               >
-                Add Episode
+                {t('addepisode')}
               </OutlinedBox>
 
               <ButtonContainer>
@@ -626,7 +632,7 @@ const Upload = ({ setUploadOpen }) => {
                     !backDisabled && goToPodcast();
                   }}
                 >
-                  Back
+                  {t('back')}
                 </OutlinedBox>
                 <OutlinedBox
                   button={true}
@@ -639,7 +645,7 @@ const Upload = ({ setUploadOpen }) => {
                   {loading ? (
                     <CircularProgress color='inherit' size={20} />
                   ) : (
-                    'Create'
+                    t('create')
                   )}
                 </OutlinedBox>
               </ButtonContainer>

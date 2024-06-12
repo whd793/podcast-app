@@ -23,5 +23,18 @@
   "createaccount": "Create Account",
   "language": "Language:",
   "fullname": "Full Name",
-  "browseall": "Browse All"
+  "browseall": "Browse All",
+  "youruploads": "Your Uploads",
+  "yourfavorites": "Your Favorites",
+  "uploadpodcast": "Upload Podcast",
+  "podcastname": "Podcast Name*",
+  "podcastdescription": "Podcast Description*",
+  "tagsseparated": "Tags separated by comma(,) ex: Sports,Comedy",
+  "selectcategory": "Select Category",
+  "episodename": "Episode Name*",
+  "episodedescription": "Episode Description*",
+  "delete": "Delete",
+  "addepisode": "Add Episode",
+  "back": "Back",
+  "create": "Create"
 }

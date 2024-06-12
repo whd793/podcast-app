@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Avatar from '@mui/material/Avatar';
 import { getUsers } from '../api/index';
 import { PodcastCard } from '../components/PodcastCard.jsx';
-
+import { useTranslation } from 'react-i18next';
 const ProfileAvatar = styled.div`
   padding-left: 3rem;
   @media (max-width: 768px) {
@@ -119,6 +119,7 @@ const Profile = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [name, setName] = useState('');
 
+  const { t } = useTranslation();
   const token = localStorage.getItem('podstreamtoken');
   const getUser = async () => {
     await getUsers(token)
@@ -157,7 +158,7 @@ const Profile = () => {
       </UserDetails>
       {currentUser && user?.podcasts.length > 0 && (
         <FilterContainer box={true}>
-          <Topic>Your Uploads</Topic>
+          <Topic>{t('youruploads')}</Topic>
           <Podcasts>
             {user?.podcasts.map((podcast) => (
               <PodcastCard podcast={podcast} user={user} />
@@ -167,14 +168,14 @@ const Profile = () => {
       )}
       {currentUser && user?.podcasts.length === 0 && (
         <FilterContainer box={true}>
-          <Topic>Your Uploads</Topic>
+          <Topic>{t('youruploads')}</Topic>
           <Container>
             <ButtonContainer>Upload</ButtonContainer>
           </Container>
         </FilterContainer>
       )}
       <FilterContainer box={true}>
-        <Topic>Your Favourites</Topic>
+        <Topic>{t('yourfavorites')}</Topic>
         <Podcasts>
           {user &&
             user?.favorits.map((podcast) => (

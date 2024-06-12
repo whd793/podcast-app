@@ -7,7 +7,7 @@ import { PodcastCard } from '../components/PodcastCard.jsx';
 import { getUsers } from '../api/index';
 import { Link } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
-
+import { useTranslation } from 'react-i18next';
 const DashboardMain = styled.div`
   padding: 20px 30px;
   padding-bottom: 200px;
@@ -170,6 +170,8 @@ const Dashboard = ({ setSignInOpen }) => {
     setLoading(false);
   };
 
+  const { t } = useTranslation();
+
   useEffect(() => {
     getallData();
   }, [currentUser]);
@@ -187,7 +189,7 @@ const Dashboard = ({ setSignInOpen }) => {
               <Topic>
                 Your Uploads
                 <Link to={`/profile`} style={{ textDecoration: 'none' }}>
-                  <Span>Show All</Span>
+                  <Span>{t('showall')}</Span>
                 </Link>
               </Topic>
               <Podcasts>
@@ -203,12 +205,12 @@ const Dashboard = ({ setSignInOpen }) => {
           )}
           <FilterContainer>
             <Topic>
-              Most Popular
+              {t('mostpopular')}
               <Link
                 to={`/showpodcasts/mostpopular`}
                 style={{ textDecoration: 'none' }}
               >
-                <Span>Show All</Span>
+                <Span>{t('showall')}</Span>
               </Link>
             </Topic>
             <Podcasts>
@@ -223,12 +225,12 @@ const Dashboard = ({ setSignInOpen }) => {
           </FilterContainer>
           <FilterContainer>
             <Topic>
-              Comedy
+              {t('comedy')}
               <Link
                 to={`/showpodcasts/comedy`}
                 style={{ textDecoration: 'none' }}
               >
-                <Span>Show All</Span>
+                <Span>{t('showall')}</Span>
               </Link>
             </Topic>
             <Podcasts>
@@ -244,8 +246,8 @@ const Dashboard = ({ setSignInOpen }) => {
           <FilterContainer>
             <Link to={`/showpodcasts/news`} style={{ textDecoration: 'none' }}>
               <Topic>
-                News
-                <Span>Show All</Span>
+                {t('news')}
+                <Span>{t('showall')}</Span>
               </Topic>
             </Link>
             <Podcasts>
@@ -261,8 +263,8 @@ const Dashboard = ({ setSignInOpen }) => {
           <FilterContainer>
             <Link to={`/showpodcasts/crime`} style={{ textDecoration: 'none' }}>
               <Topic>
-                Crime
-                <Span>Show All</Span>
+                {t('crime')}
+                <Span>{t('showall')}</Span>
               </Topic>
             </Link>
             <Podcasts>
@@ -281,8 +283,8 @@ const Dashboard = ({ setSignInOpen }) => {
               style={{ textDecoration: 'none' }}
             >
               <Topic>
-                Sports
-                <Span>Show All</Span>
+                {t('sports')}
+                <Span>{t('showall')}</Span>
               </Topic>
             </Link>
             <Podcasts>

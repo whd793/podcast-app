@@ -20,6 +20,7 @@ import AudioPlayer from './components/AudioPlayer.jsx';
 import VideoPlayer from './components/VideoPlayer.jsx';
 import PodcastDetails from './pages/PodcastDetails.jsx';
 import { closeSignin } from './redux/setSigninSlice.jsx';
+import i18n from './i18n'; // Import i18n configuration
 
 const Frame = styled.div`
   display: flex;
@@ -51,6 +52,23 @@ function App() {
 
   const { currentUser } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    fetch('https://ipapi.co/json/')
+      .then((response) => response.json())
+      .then((data) => {
+        const userCountry = data.country_code;
+        if (userCountry === 'KR') {
+          i18n.changeLanguage('ko');
+          console.log('ko');
+        } else {
+          i18n.changeLanguage('en');
+          console.log('en');
+        }
+      })
+      .catch(() => i18n.changeLanguage('en'));
+  }, []);
+
   //set the menuOpen state to false if the screen size is less than 768px
   useEffect(() => {
     const resize = () => {

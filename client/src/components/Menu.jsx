@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { logout } from '../redux/userSlice';
+import { displayPodcastFailure, logout } from '../redux/userSlice';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
@@ -15,6 +15,7 @@ import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import CloseRounded from '@mui/icons-material/CloseRounded';
 import LogoIcon from '../Images/Logo.png';
 import { openSignin } from '../redux/setSigninSlice';
+import { useTranslation } from 'react-i18next';
 
 const MenuContainer = styled.div`
   flex: 0.5;
@@ -51,6 +52,27 @@ const Elements = styled.div`
 `;
 const NavText = styled.div`
   padding: 12px 0px;
+`;
+
+const LangElement = styled.div`
+  padding: 4px 16px;
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+  ${'' /* cursor: pointer; */}
+  color: ${({ theme }) => theme.text_secondary};
+  width: 100%;
+`;
+const LangBtn = styled.a`
+  cursor: pointer;
+  text-decoration: None;
+  &:hover {
+    color: ${({ theme }) => theme.text_secondary};
+    text-decoration: underline;
+  }
 `;
 const HR = styled.div`
   width: 100%;
@@ -92,14 +114,20 @@ const Menu = ({ setMenuOpen, darkMode, setDarkMode, setUploadOpen }) => {
     dispatch(logout());
     navigate(`/`);
   };
+  const { t } = useTranslation();
+  const { i18n } = useTranslation();
+
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
 
   return (
     <MenuContainer setMenuOpen={setMenuOpen}>
       <Flex>
         <Link to='/' style={{ textDecoration: 'none', color: 'inherit' }}>
           <Logo>
-            <Image src={LogoIcon} />
-            PODSTREAM
+            {/* <Image src={LogoIcon} /> */}
+            PODCAST
           </Logo>
         </Link>
         <Close>
@@ -115,7 +143,7 @@ const Menu = ({ setMenuOpen, darkMode, setDarkMode, setUploadOpen }) => {
       >
         <Elements>
           <HomeRoundedIcon />
-          <NavText>Dashboard</NavText>
+          <NavText>{t('home')}</NavText>
         </Elements>
       </Link>
       <Link
@@ -124,7 +152,7 @@ const Menu = ({ setMenuOpen, darkMode, setDarkMode, setUploadOpen }) => {
       >
         <Elements>
           <SearchRoundedIcon />
-          <NavText>Search</NavText>
+          <NavText>{t('search')}</NavText>
         </Elements>
       </Link>
       {currentUser ? (
@@ -134,7 +162,7 @@ const Menu = ({ setMenuOpen, darkMode, setDarkMode, setUploadOpen }) => {
         >
           <Elements>
             <FavoriteRoundedIcon />
-            <NavText>Favourites</NavText>
+            <NavText>{t('favorites')}</NavText>
           </Elements>
         </Link>
       ) : (
@@ -144,7 +172,7 @@ const Menu = ({ setMenuOpen, darkMode, setDarkMode, setUploadOpen }) => {
         >
           <Elements>
             <FavoriteRoundedIcon />
-            <NavText>Favourites</NavText>
+            <NavText>{t('favorites')}</NavText>
           </Elements>
         </Link>
       )}
@@ -161,7 +189,7 @@ const Menu = ({ setMenuOpen, darkMode, setDarkMode, setUploadOpen }) => {
       >
         <Elements>
           <BackupRoundedIcon />
-          <NavText>Upload</NavText>
+          <NavText>{t('upload')}</NavText>
         </Elements>
       </Link>
 
@@ -188,9 +216,20 @@ const Menu = ({ setMenuOpen, darkMode, setDarkMode, setUploadOpen }) => {
       ) : (
         <Elements onClick={() => dispatch(openSignin())}>
           <ExitToAppRoundedIcon />
-          <NavText>Log In</NavText>
+          <NavText>{t('login')}</NavText>
         </Elements>
       )}
+      <HR />
+      <LangElement>
+        <NavText>{t('language')}</NavText>
+
+        <NavText>
+          <LangBtn onClick={() => changeLanguage('en')}>EN</LangBtn>
+        </NavText>
+        <NavText>
+          <LangBtn onClick={() => changeLanguage('ko')}>KR</LangBtn>
+        </NavText>
+      </LangElement>
     </MenuContainer>
   );
 };

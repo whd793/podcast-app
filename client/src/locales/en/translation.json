@@ -1,0 +1,23 @@
+{
+  "login": "Login",
+  "mostpopular": "Most Popular",
+  "comedy": "Comedy",
+  "news": "News",
+  "crime": "Crime",
+  "sports": "Sports",
+  "showall": "Show All",
+  "home": "Home",
+  "search": "Search",
+  "favorites": "Favorites",
+  "upload": "Upload",
+  "lightmode": "Light Mode",
+  "darkmode": "Dark Mode",
+  "signinwithkakao": "Sign In With Kakao",
+  "emailid": "Email Id",
+  "password": "Password",
+  "forgotpassword": "Forgot password?",
+  "signin": "Sign in",
+  "donthaveanaccount": "Don't have an account",
+  "createaccount": "Create Account",
+  "language": "Language:"
+}

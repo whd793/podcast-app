@@ -27,6 +27,7 @@ import { kakaoSignIn } from '../api/index';
 import axios from 'axios';
 import { closeSignin } from '../redux/setSigninSlice';
 import KakaoLogin from 'react-kakao-login';
+import { useTranslation } from 'react-i18next';
 
 const Container = styled.div`
   width: 100%;
@@ -164,6 +165,8 @@ const SignIn = ({ setSignInOpen, setSignUpOpen }) => {
     password: '',
     showPassword: false,
   });
+
+  const { t } = useTranslation();
 
   //verify otp
   const [showOTP, setShowOTP] = useState(false);
@@ -486,7 +489,7 @@ const SignIn = ({ setSignInOpen, setSignUpOpen }) => {
                     style={{ margin: '24px' }}
                     onClick={onClick}
                   >
-                    Sign In with Kakao
+                    {t('signinwithkakao')}
                   </OutlinedBox>
                 )}
               />
@@ -515,7 +518,7 @@ const SignIn = ({ setSignInOpen, setSignUpOpen }) => {
                   style={{ paddingRight: '12px' }}
                 />
                 <TextInput
-                  placeholder='Email Id'
+                  placeholder={t('emailid')}
                   type='email'
                   onChange={(e) => setEmail(e.target.value)}
                 />
@@ -527,7 +530,7 @@ const SignIn = ({ setSignInOpen, setSignUpOpen }) => {
                   style={{ paddingRight: '12px' }}
                 />
                 <TextInput
-                  placeholder='Password'
+                  placeholder={t('password')}
                   type={values.showPassword ? 'text' : 'password'}
                   onChange={(e) => setPassword(e.target.value)}
                 />
@@ -561,7 +564,7 @@ const SignIn = ({ setSignInOpen, setSignUpOpen }) => {
                 {Loading ? (
                   <CircularProgress color='inherit' size={20} />
                 ) : (
-                  'Sign In'
+                  t('signin')
                 )}
               </OutlinedBox>
             </>

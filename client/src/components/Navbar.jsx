@@ -7,6 +7,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import MenuIcon from '@mui/icons-material/Menu';
 import { IconButton } from '@mui/material';
 import { openSignin } from '../redux/setSigninSlice';
+import { useTranslation } from 'react-i18next';
 
 const NavbarDiv = styled.div`
   display: flex;
@@ -63,6 +64,7 @@ const IcoButton = styled(IconButton)`
 const Navbar = ({ menuOpen, setMenuOpen, setSignInOpen, setSignUpOpen }) => {
   const { currentUser } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   return (
     <NavbarDiv>
@@ -85,7 +87,7 @@ const Navbar = ({ menuOpen, setMenuOpen, setSignInOpen, setSignUpOpen }) => {
       ) : (
         <ButtonDiv onClick={() => dispatch(openSignin())}>
           <PersonIcon style={{ fontSize: '18px' }} />
-          Login
+          {t('login')}
         </ButtonDiv>
       )}
     </NavbarDiv>

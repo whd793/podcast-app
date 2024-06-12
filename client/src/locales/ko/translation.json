@@ -1,0 +1,23 @@
+{
+  "login": "로그인",
+  "mostpopular": "인기 오디오",
+  "comedy": "코미디",
+  "news": "뉴스",
+  "crime": "범죄",
+  "sports": "스포츠",
+  "showall": "더보기",
+  "home": "홈",
+  "search": "검색",
+  "favorites": "즐겨찾기",
+  "upload": "업로드",
+  "lightmode": "Light Mode",
+  "darkmode": "Dark Mode",
+  "signinwithkakao": "카카오 로그인",
+  "emailid": "이메일 아이디",
+  "password": "비밀번호",
+  "forgotpassword": "비밀번호 잊으셨나요?",
+  "signin": "로그인",
+  "donthaveanaccount": "Don't have an account",
+  "createaccount": "계정 만들기",
+  "language": "언어:"
+}

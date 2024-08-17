@@ -24,14 +24,27 @@ const Topic = styled.div`
   align-items: center;
 `;
 const Podcasts = styled.div`
-  display: flex;
+  ${
+    '' /* display: flex;
   flex-wrap: wrap;
   height: 100%;
   gap: 10px;
   padding: 30px 0px;
+  justify-content: center; */
+  }
+  ${
+    '' /* display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  justify-items: center; */
+  }
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 230px); /* Fixed item width */
+  gap: 16px;
+  justify-content: center; /* Center the grid within the container */
 `;
 const Container = styled.div`
-  background-color: ${({ theme }) => theme.bg};
+  ${'' /* background-color: ${({ theme }) => theme.bg}; */}
   padding: 20px;
   border-radius: 6px;
   min-height: 400px;

@@ -34,10 +34,22 @@ const Heading = styled.div`
   margin: 10px 14px;
 `;
 const BrowseAll = styled.div`
-  display: flex;
+  ${
+    '' /* display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  padding: 14px;
+  padding: 14px; */
+  }
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 190px); /* Fixed item width */
+  gap: 16px;
+  justify-content: center; /* Center the grid within the container */
+  ${
+    '' /* 
+  @media (max-width: 700px) {
+    grid-template-columns: 2fr;
+  } */
+  }
 `;
 const SearchedCards = styled.div`
   display: flex;

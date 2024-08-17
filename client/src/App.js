@@ -26,6 +26,7 @@ const Frame = styled.div`
   display: flex;
   flex-direction: column;
   flex: 3;
+  overflow-y: auto;
 `;
 
 const Podstream = styled.div`

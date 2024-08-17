@@ -85,6 +85,33 @@ const DisplayNo = styled.div`
   color: ${({ theme }) => theme.text_primary};
 `;
 
+// NEW SCROLL STYLE -
+
+const PodcastsScroll = styled.div`
+  display: flex;
+  ${'' /* flex-wrap: wrap; */}
+  gap: 14px;
+  padding: 18px 6px;
+
+  overflow-x: auto; /* Enables horizontal scrolling */
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Hides scrollbar on Firefox */
+  -ms-overflow-style: none; /* Hides scrollbar on IE/Edge */
+
+  &::-webkit-scrollbar {
+    display: none; /* Hides scrollbar on Chrome/Safari */
+  }
+`;
+
+const FilterContainerScroll = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const CategorySection = styled.section`
+  margin-bottom: 40px;
+`;
+
 const Dashboard = ({ setSignInOpen }) => {
   const [mostPopular, setMostPopular] = useState([]);
   const [user, setUser] = useState();
@@ -185,24 +212,52 @@ const Dashboard = ({ setSignInOpen }) => {
       ) : (
         <>
           {currentUser && user?.podcasts?.length > 0 && (
-            <FilterContainer box={true}>
+            <CategorySection>
+              <FilterContainerScroll box={true}>
+                <Topic>
+                  {t('youruploads')}
+                  <Link to={`/profile`} style={{ textDecoration: 'none' }}>
+                    <Span>{t('showall')}</Span>
+                  </Link>
+                </Topic>
+                <PodcastsScroll>
+                  {user?.podcasts.slice(0, 10).map((podcast) => (
+                    <PodcastCard
+                      podcast={podcast}
+                      user={user}
+                      setSignInOpen={setSignInOpen}
+                    />
+                  ))}
+                </PodcastsScroll>
+              </FilterContainerScroll>
+            </CategorySection>
+          )}
+
+          <CategorySection>
+            <FilterContainerScroll>
               <Topic>
-                {t('youruploads')}
-                <Link to={`/profile`} style={{ textDecoration: 'none' }}>
+                {t('mostpopular')}
+                <Link
+                  to={`/showpodcasts/mostpopular`}
+                  style={{ textDecoration: 'none' }}
+                >
                   <Span>{t('showall')}</Span>
                 </Link>
               </Topic>
-              <Podcasts>
-                {user?.podcasts.slice(0, 10).map((podcast) => (
+
+              <PodcastsScroll>
+                {mostPopular.slice(0, 10).map((podcast) => (
                   <PodcastCard
                     podcast={podcast}
                     user={user}
                     setSignInOpen={setSignInOpen}
                   />
                 ))}
-              </Podcasts>
-            </FilterContainer>
-          )}
+              </PodcastsScroll>
+            </FilterContainerScroll>
+          </CategorySection>
+          {/* 
+
           <FilterContainer>
             <Topic>
               {t('mostpopular')}
@@ -222,81 +277,96 @@ const Dashboard = ({ setSignInOpen }) => {
                 />
               ))}
             </Podcasts>
-          </FilterContainer>
-          <FilterContainer>
-            <Topic>
-              {t('comedy')}
+          </FilterContainer> */}
+
+          <CategorySection>
+            <FilterContainerScroll>
+              <Topic>
+                {t('comedy')}
+                <Link
+                  to={`/showpodcasts/comedy`}
+                  style={{ textDecoration: 'none' }}
+                >
+                  <Span>{t('showall')}</Span>
+                </Link>
+              </Topic>
+              <PodcastsScroll>
+                {comedy.slice(0, 10).map((podcast) => (
+                  <PodcastCard
+                    podcast={podcast}
+                    user={user}
+                    setSignInOpen={setSignInOpen}
+                  />
+                ))}
+              </PodcastsScroll>
+            </FilterContainerScroll>
+          </CategorySection>
+          <CategorySection>
+            <FilterContainerScroll>
               <Link
-                to={`/showpodcasts/comedy`}
+                to={`/showpodcasts/news`}
                 style={{ textDecoration: 'none' }}
               >
-                <Span>{t('showall')}</Span>
+                <Topic>
+                  {t('news')}
+                  <Span>{t('showall')}</Span>
+                </Topic>
               </Link>
-            </Topic>
-            <Podcasts>
-              {comedy.slice(0, 10).map((podcast) => (
-                <PodcastCard
-                  podcast={podcast}
-                  user={user}
-                  setSignInOpen={setSignInOpen}
-                />
-              ))}
-            </Podcasts>
-          </FilterContainer>
-          <FilterContainer>
-            <Link to={`/showpodcasts/news`} style={{ textDecoration: 'none' }}>
-              <Topic>
-                {t('news')}
-                <Span>{t('showall')}</Span>
-              </Topic>
-            </Link>
-            <Podcasts>
-              {news.slice(0, 10).map((podcast) => (
-                <PodcastCard
-                  podcast={podcast}
-                  user={user}
-                  setSignInOpen={setSignInOpen}
-                />
-              ))}
-            </Podcasts>
-          </FilterContainer>
-          <FilterContainer>
-            <Link to={`/showpodcasts/crime`} style={{ textDecoration: 'none' }}>
-              <Topic>
-                {t('crime')}
-                <Span>{t('showall')}</Span>
-              </Topic>
-            </Link>
-            <Podcasts>
-              {crime.slice(0, 10).map((podcast) => (
-                <PodcastCard
-                  podcast={podcast}
-                  user={user}
-                  setSignInOpen={setSignInOpen}
-                />
-              ))}
-            </Podcasts>
-          </FilterContainer>
-          <FilterContainer>
-            <Link
-              to={`/showpodcasts/sports`}
-              style={{ textDecoration: 'none' }}
-            >
-              <Topic>
-                {t('sports')}
-                <Span>{t('showall')}</Span>
-              </Topic>
-            </Link>
-            <Podcasts>
-              {sports.slice(0, 10).map((podcast) => (
-                <PodcastCard
-                  podcast={podcast}
-                  user={user}
-                  setSignInOpen={setSignInOpen}
-                />
-              ))}
-            </Podcasts>
-          </FilterContainer>
+              <PodcastsScroll>
+                {news.slice(0, 10).map((podcast) => (
+                  <PodcastCard
+                    podcast={podcast}
+                    user={user}
+                    setSignInOpen={setSignInOpen}
+                  />
+                ))}
+              </PodcastsScroll>
+            </FilterContainerScroll>
+          </CategorySection>
+          <CategorySection>
+            <FilterContainerScroll>
+              <Link
+                to={`/showpodcasts/crime`}
+                style={{ textDecoration: 'none' }}
+              >
+                <Topic>
+                  {t('crime')}
+                  <Span>{t('showall')}</Span>
+                </Topic>
+              </Link>
+              <PodcastsScroll>
+                {crime.slice(0, 10).map((podcast) => (
+                  <PodcastCard
+                    podcast={podcast}
+                    user={user}
+                    setSignInOpen={setSignInOpen}
+                  />
+                ))}
+              </PodcastsScroll>
+            </FilterContainerScroll>
+          </CategorySection>
+          <CategorySection>
+            <FilterContainerScroll>
+              <Link
+                to={`/showpodcasts/sports`}
+                style={{ textDecoration: 'none' }}
+              >
+                <Topic>
+                  {t('sports')}
+                  <Span>{t('showall')}</Span>
+                </Topic>
+              </Link>
+              <PodcastsScroll>
+                {sports.slice(0, 10).map((podcast) => (
+                  <PodcastCard
+                    podcast={podcast}
+                    user={user}
+                    setSignInOpen={setSignInOpen}
+                  />
+                ))}
+              </PodcastsScroll>
+            </FilterContainerScroll>
+          </CategorySection>
         </>
       )}
     </DashboardMain>

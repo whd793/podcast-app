@@ -17,6 +17,7 @@ const ProfileContainer = styled.div`
   justify-content: center;
   @media (max-width: 768px) {
     align-items: center;
+    text-align: center;
   }
 `;
 const ProfileName = styled.div`
@@ -60,13 +61,19 @@ const Span = styled.span`
   }
 `;
 const Podcasts = styled.div`
-  display: flex;
+  ${
+    '' /* display: flex;
   flex-wrap: wrap;
   gap: 14px;
   padding: 18px 6px;
   @media (max-width: 550px) {
     justify-content: center;
+  } */
   }
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 230px); /* Fixed item width */
+  gap: 16px;
+  justify-content: center;
 `;
 const ProfileMain = styled.div`
   padding: 20px 30px;
@@ -80,12 +87,14 @@ const ProfileMain = styled.div`
 const UserDetails = styled.div`
 display flex;
 gap: 120px;
+margin: auto;
 @media (max-width: 768px) {
     width: fit-content;
     flex-direction: column; 
     gap: 20px;
     justify-content: center;
     align-items: center;
+    
   }
 `;
 const Container = styled.div`
@@ -169,9 +178,9 @@ const Profile = () => {
       {currentUser && user?.podcasts.length === 0 && (
         <FilterContainer box={true}>
           <Topic>{t('youruploads')}</Topic>
-          <Container>
+          {/* <Container>
             <ButtonContainer>Upload</ButtonContainer>
-          </Container>
+          </Container> */}
         </FilterContainer>
       )}
       <FilterContainer box={true}>

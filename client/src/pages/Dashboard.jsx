@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { getMostPopularPodcast } from '../api/index';
@@ -8,6 +8,8 @@ import { getUsers } from '../api/index';
 import { Link } from 'react-router-dom';
 import { CircularProgress } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+
 const DashboardMain = styled.div`
   padding: 20px 30px;
   padding-bottom: 200px;
@@ -85,6 +87,40 @@ const DisplayNo = styled.div`
   color: ${({ theme }) => theme.text_primary};
 `;
 
+// drag right
+const ItemsScrollContainerWrapper = styled.div`
+  position: relative;
+  width: 100%;
+`;
+
+const ScrollButton = styled.button`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: ${({ theme }) => theme.scroll_primary_bg};
+  color: ${({ theme }) => theme.scroll_primary_color};
+
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  z-index: 1;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.55;
+  width: 55px;
+  height: 55px;
+
+  &:hover {
+    ${'' /* background: rgba(0, 0, 0, 0.7); */}
+    opacity: 1;
+  }
+
+  ${({ direction }) =>
+    direction === 'left' ? 'left: 0;' : 'right: 0;'}/* Positions the button */
+`;
+
 // NEW SCROLL STYLE -
 
 const PodcastsScroll = styled.div`
@@ -111,6 +147,30 @@ const FilterContainerScroll = styled.div`
 export const CategorySection = styled.section`
   margin-bottom: 40px;
 `;
+
+const DraggableItemsScrollContainer = ({ children }) => {
+  const containerRef = useRef(null);
+
+  const scrollLeft = () => {
+    containerRef.current.scrollBy({ left: -220, behavior: 'smooth' });
+  };
+
+  const scrollRight = () => {
+    containerRef.current.scrollBy({ left: 220, behavior: 'smooth' });
+  };
+
+  return (
+    <ItemsScrollContainerWrapper>
+      <ScrollButton direction='left' onClick={scrollLeft}>
+        <FaChevronLeft />
+      </ScrollButton>
+      <PodcastsScroll ref={containerRef}>{children}</PodcastsScroll>
+      <ScrollButton direction='right' onClick={scrollRight}>
+        <FaChevronRight />
+      </ScrollButton>
+    </ItemsScrollContainerWrapper>
+  );
+};
 
 const Dashboard = ({ setSignInOpen }) => {
   const [mostPopular, setMostPopular] = useState([]);
@@ -220,7 +280,7 @@ const Dashboard = ({ setSignInOpen }) => {
                     <Span>{t('showall')}</Span>
                   </Link>
                 </Topic>
-                <PodcastsScroll>
+                <DraggableItemsScrollContainer>
                   {user?.podcasts.slice(0, 10).map((podcast) => (
                     <PodcastCard
                       podcast={podcast}
@@ -228,7 +288,7 @@ const Dashboard = ({ setSignInOpen }) => {
                       setSignInOpen={setSignInOpen}
                     />
                   ))}
-                </PodcastsScroll>
+                </DraggableItemsScrollContainer>
               </FilterContainerScroll>
             </CategorySection>
           )}
@@ -244,8 +304,7 @@ const Dashboard = ({ setSignInOpen }) => {
                   <Span>{t('showall')}</Span>
                 </Link>
               </Topic>
-
-              <PodcastsScroll>
+              <DraggableItemsScrollContainer>
                 {mostPopular.slice(0, 10).map((podcast) => (
                   <PodcastCard
                     podcast={podcast}
@@ -253,7 +312,7 @@ const Dashboard = ({ setSignInOpen }) => {
                     setSignInOpen={setSignInOpen}
                   />
                 ))}
-              </PodcastsScroll>
+              </DraggableItemsScrollContainer>
             </FilterContainerScroll>
           </CategorySection>
           {/* 
@@ -290,7 +349,7 @@ const Dashboard = ({ setSignInOpen }) => {
                   <Span>{t('showall')}</Span>
                 </Link>
               </Topic>
-              <PodcastsScroll>
+              <DraggableItemsScrollContainer>
                 {comedy.slice(0, 10).map((podcast) => (
                   <PodcastCard
                     podcast={podcast}
@@ -298,7 +357,7 @@ const Dashboard = ({ setSignInOpen }) => {
                     setSignInOpen={setSignInOpen}
                   />
                 ))}
-              </PodcastsScroll>
+              </DraggableItemsScrollContainer>
             </FilterContainerScroll>
           </CategorySection>
           <CategorySection>
@@ -312,7 +371,7 @@ const Dashboard = ({ setSignInOpen }) => {
                   <Span>{t('showall')}</Span>
                 </Topic>
               </Link>
-              <PodcastsScroll>
+              <DraggableItemsScrollContainer>
                 {news.slice(0, 10).map((podcast) => (
                   <PodcastCard
                     podcast={podcast}
@@ -320,7 +379,7 @@ const Dashboard = ({ setSignInOpen }) => {
                     setSignInOpen={setSignInOpen}
                   />
                 ))}
-              </PodcastsScroll>
+              </DraggableItemsScrollContainer>
             </FilterContainerScroll>
           </CategorySection>
           <CategorySection>
@@ -334,7 +393,7 @@ const Dashboard = ({ setSignInOpen }) => {
                   <Span>{t('showall')}</Span>
                 </Topic>
               </Link>
-              <PodcastsScroll>
+              <DraggableItemsScrollContainer>
                 {crime.slice(0, 10).map((podcast) => (
                   <PodcastCard
                     podcast={podcast}
@@ -342,7 +401,7 @@ const Dashboard = ({ setSignInOpen }) => {
                     setSignInOpen={setSignInOpen}
                   />
                 ))}
-              </PodcastsScroll>
+              </DraggableItemsScrollContainer>
             </FilterContainerScroll>
           </CategorySection>
           <CategorySection>
@@ -356,7 +415,7 @@ const Dashboard = ({ setSignInOpen }) => {
                   <Span>{t('showall')}</Span>
                 </Topic>
               </Link>
-              <PodcastsScroll>
+              <DraggableItemsScrollContainer>
                 {sports.slice(0, 10).map((podcast) => (
                   <PodcastCard
                     podcast={podcast}
@@ -364,7 +423,7 @@ const Dashboard = ({ setSignInOpen }) => {
                     setSignInOpen={setSignInOpen}
                   />
                 ))}
-              </PodcastsScroll>
+              </DraggableItemsScrollContainer>
             </FilterContainerScroll>
           </CategorySection>
         </>

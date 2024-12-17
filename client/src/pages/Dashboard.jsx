@@ -315,6 +315,7 @@ const Dashboard = ({ setSignInOpen }) => {
               </DraggableItemsScrollContainer>
             </FilterContainerScroll>
           </CategorySection>
+
           {/* 
 
           <FilterContainer>

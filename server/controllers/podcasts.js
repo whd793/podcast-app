@@ -95,46 +95,100 @@ export const getPodcastById = async (req, res, next) => {
   }
 };
 
+// export const favoritPodcast = async (req, res, next) => {
+//   // Check if the user is the creator of the podcast
+//   const user = await User.findById(req.user.id);
+//   console.log(req.body.id);
+//   const podcast = await Podcasts.findById(req.body.id);
+//   let found = false;
+//   if (user.id === podcast.creator) {
+//     return next(createError(403, "You can't favorit your own podcast!"));
+//   }
+
+//   // Check if the podcast is already in the user's favorits
+//   await Promise.all(
+//     user.favorits.map(async (item) => {
+//       if (req.body.id == item) {
+//         //remove from favorite
+//         found = true;
+//         console.log('this');
+//         await User.findByIdAndUpdate(
+//           user.id,
+//           {
+//             $pull: { favorits: req.body.id },
+//           },
+//           { new: true }
+//         );
+//         res.status(200).json({ message: 'Removed from favorit' });
+//       }
+//     })
+//   );
+
+//   if (!found) {
+//     await User.findByIdAndUpdate(
+//       user.id,
+//       {
+//         $push: { favorits: req.body.id },
+//       },
+//       { new: true }
+//     );
+//     res.status(200).json({ message: 'Added to favorit' });
+//   }
+// };
+
+// Improved controller
 export const favoritPodcast = async (req, res, next) => {
-  // Check if the user is the creator of the podcast
-  const user = await User.findById(req.user.id);
-  const podcast = await Podcasts.findById(req.body.id);
-  let found = false;
-  if (user.id === podcast.creator) {
-    return next(createError(403, "You can't favorit your own podcast!"));
-  }
+  try {
+    const userId = req.user.id;
+    const podcastId = req.params.id; // Get ID from params instead of body
 
-  // Check if the podcast is already in the user's favorits
-  await Promise.all(
-    user.favorits.map(async (item) => {
-      if (req.body.id == item) {
-        //remove from favorite
-        found = true;
-        console.log('this');
-        await User.findByIdAndUpdate(
-          user.id,
-          {
-            $pull: { favorits: req.body.id },
-          },
-          { new: true }
-        );
-        res.status(200).json({ message: 'Removed from favorit' });
-      }
-    })
-  );
+    // Find user and podcast
+    const [user, podcast] = await Promise.all([
+      User.findById(userId),
+      Podcasts.findById(podcastId),
+    ]);
 
-  if (!found) {
-    await User.findByIdAndUpdate(
-      user.id,
-      {
-        $push: { favorits: req.body.id },
-      },
-      { new: true }
-    );
-    res.status(200).json({ message: 'Added to favorit' });
+    // Error checking
+    if (!podcast) {
+      return next(createError(404, 'Podcast not found'));
+    }
+
+    if (!user) {
+      return next(createError(404, 'User not found'));
+    }
+
+    if (user.id === podcast.creator) {
+      return next(createError(403, "You can't favorite your own podcast!"));
+    }
+
+    // Check if podcast is in favorites
+    const podcastIndex = user.favorits.indexOf(podcastId);
+
+    if (podcastIndex === -1) {
+      // Add to favorites
+      await User.findByIdAndUpdate(
+        userId,
+        {
+          $push: { favorits: podcastId },
+        },
+        { new: true }
+      );
+      res.status(200).json({ message: 'Added to favorites' });
+    } else {
+      // Remove from favorites
+      await User.findByIdAndUpdate(
+        userId,
+        {
+          $pull: { favorits: podcastId },
+        },
+        { new: true }
+      );
+      res.status(200).json({ message: 'Removed from favorites' });
+    }
+  } catch (err) {
+    next(err);
   }
 };
-
 //add view
 
 export const addView = async (req, res, next) => {

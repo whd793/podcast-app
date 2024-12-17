@@ -105,7 +105,9 @@ mongoose
 
 app.use(
   cors({
-    origin: 'https://podcastaudio.netlify.app', // Your frontend domain
+    // origin: 'https://podcastaudio.netlify.app', // Your frontend domain
+    origin: ['https://podcastaudio.netlify.app', 'http://localhost:3000'],
+
     credentials: true,
   })
 );

@@ -10,17 +10,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* width */
-::-webkit-scrollbar {
-  width: 2px;
-}
-/* Track */
-::-webkit-scrollbar-track {
+/* Add this to your global CSS file */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
 
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 6px;
-  height: 50px;
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

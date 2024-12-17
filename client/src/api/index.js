@@ -4,7 +4,7 @@ import jwt_decode from 'jwt-decode';
 // const API = axios.create({ baseURL: `https://podcastaudio.com/api` });
 const API = axios.create({
   // baseURL: `https://podcastweb-0e7227c429c0.herokuapp.com/api`,
-  baseURL: `podcast-app-eight-inky.vercel.app/api`,
+  baseURL: `https://podcast-app-eight-inky.vercel.app/api`,
   // baseURL: `https://podcast-app-sgmt.onrender.com/api`,
   // baseURL: `http://localhost:8700/api`,
 });
@@ -74,13 +74,27 @@ export const addEpisodes = async (podcast, token) =>
     { headers: { Authorization: `Bearer ${token}` } },
     { withCredentials: true }
   );
-export const favoritePodcast = async (id, token) =>
-  await API.post(
-    `/podcasts/favorit`,
-    { id: id },
-    { headers: { Authorization: `Bearer ${token}` } },
-    { withCredentials: true }
+
+// export const favoritePodcast = async (id, token) =>
+//   await API.post(
+//     `/podcasts/favorit`,
+//     { id: id },
+//     { headers: { Authorization: `Bearer ${token}` } },
+//     { withCredentials: true }
+//   );
+// src/api/index.js
+
+// Change this function
+export const favoritePodcast = async (id, token) => {
+  return await API.post(
+    `/podcasts/favorit/${id}`, // Changed to match backend route
+    {}, // Empty body since we're passing id in URL
+    {
+      headers: { Authorization: `Bearer ${token}` },
+      withCredentials: true,
+    }
   );
+};
 export const getRandomPodcast = async () => await API.get('/podcasts/random');
 export const getPodcastByTags = async (tags) =>
   await API.get(`/podcasts/tags?tags=${tags}`);

@@ -148,8 +148,51 @@ export const CategorySection = styled.section`
   margin-bottom: 40px;
 `;
 
+// const DraggableItemsScrollContainer = ({ children }) => {
+//   const containerRef = useRef(null);
+
+//   const scrollLeft = () => {
+//     containerRef.current.scrollBy({ left: -220, behavior: 'smooth' });
+//   };
+
+//   const scrollRight = () => {
+//     containerRef.current.scrollBy({ left: 220, behavior: 'smooth' });
+//   };
+
+//   return (
+//     <ItemsScrollContainerWrapper>
+//       <ScrollButton direction='left' onClick={scrollLeft}>
+//         <FaChevronLeft />
+//       </ScrollButton>
+//       <PodcastsScroll ref={containerRef}>{children}</PodcastsScroll>
+//       <ScrollButton direction='right' onClick={scrollRight}>
+//         <FaChevronRight />
+//       </ScrollButton>
+//     </ItemsScrollContainerWrapper>
+//   );
+// };
+
 const DraggableItemsScrollContainer = ({ children }) => {
   const containerRef = useRef(null);
+  const [showLeftButton, setShowLeftButton] = useState(false);
+  const [showRightButton, setShowRightButton] = useState(true);
+
+  const checkScrollButtons = () => {
+    if (containerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
+      setShowLeftButton(scrollLeft > 0);
+      setShowRightButton(scrollLeft < scrollWidth - clientWidth - 10);
+    }
+  };
+
+  useEffect(() => {
+    checkScrollButtons();
+    // Add scroll event listener to check buttons visibility
+    containerRef.current?.addEventListener('scroll', checkScrollButtons);
+    return () => {
+      containerRef.current?.removeEventListener('scroll', checkScrollButtons);
+    };
+  }, []);
 
   const scrollLeft = () => {
     containerRef.current.scrollBy({ left: -220, behavior: 'smooth' });
@@ -161,13 +204,19 @@ const DraggableItemsScrollContainer = ({ children }) => {
 
   return (
     <ItemsScrollContainerWrapper>
-      <ScrollButton direction='left' onClick={scrollLeft}>
-        <FaChevronLeft />
-      </ScrollButton>
-      <PodcastsScroll ref={containerRef}>{children}</PodcastsScroll>
-      <ScrollButton direction='right' onClick={scrollRight}>
-        <FaChevronRight />
-      </ScrollButton>
+      {showLeftButton && (
+        <ScrollButton direction='left' onClick={scrollLeft}>
+          <FaChevronLeft />
+        </ScrollButton>
+      )}
+      <PodcastsScroll ref={containerRef} onScroll={checkScrollButtons}>
+        {children}
+      </PodcastsScroll>
+      {showRightButton && (
+        <ScrollButton direction='right' onClick={scrollRight}>
+          <FaChevronRight />
+        </ScrollButton>
+      )}
     </ItemsScrollContainerWrapper>
   );
 };

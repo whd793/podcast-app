@@ -1,16 +1,22 @@
-import * as React from 'react';
+// import * as React from 'react';
+import React, { useState, useEffect, useRef, memo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import Avatar from '@mui/material/Avatar';
 import styled from 'styled-components';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { useState } from 'react';
+// import { useState } from 'react';
 import { IconButton } from '@mui/material';
 import { favoritePodcast } from '../api';
-import { useDispatch, useSelector } from 'react-redux';
+// import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { openSignin } from '../redux/setSigninSlice';
 import HeadphonesIcon from '@mui/icons-material/Headphones';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+
+import { openSnackbar } from '../redux/snackbarSlice';
+// ... rest of your imports
 
 const PlayIcon = styled.div`
   padding: 10px;
@@ -148,60 +154,102 @@ const Favorite = styled(IconButton)`
   box-shadow: 0 0 16px 6px #222423 !important;
 `;
 
-export const PodcastCard = ({ podcast, user, setSignInOpen }) => {
+// export const PodcastCard = ({ podcast, user, setSignInOpen }) => {
+export const PodcastCard = memo(({ podcast, user, setSignInOpen }) => {
   const [favourite, setFavourite] = useState(false);
   const dispatch = useDispatch();
 
   const token = localStorage.getItem('podstreamtoken');
 
-  const favoritpodcast = async () => {
-    await favoritePodcast(podcast._id, token)
-      .then((res) => {
-        if (res.status === 200) {
-          setFavourite(!favourite);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  React.useEffect(() => {
-    //favorits is an array of objects in which each object has a podcast id match it to the current podcast id
-    if (user?.favorits?.find((fav) => fav._id === podcast._id)) {
-      setFavourite(true);
-    }
-  }, [user]);
-
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
 
+  // const favoritpodcast = async () => {
+  //   await favoritePodcast(podcast._id, token)
+  //     .then((res) => {
+  //       if (res.status === 200) {
+  //         setFavourite(!favourite);
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
+
+  const favoritpodcast = async () => {
+    if (!currentUser) {
+      dispatch(openSignin());
+      return;
+    }
+
+    try {
+      const res = await favoritePodcast(podcast._id, token);
+      if (res.status === 200) {
+        setFavourite(!favourite);
+      }
+    } catch (err) {
+      console.error('Error toggling favorite:', err);
+      dispatch(
+        openSnackbar({
+          message: err?.response?.data?.message || 'Error updating favorite',
+          severity: 'error',
+        })
+      );
+    }
+  };
+
+  const handleFavoriteClick = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!currentUser) {
+      dispatch(openSignin());
+      return;
+    }
+
+    try {
+      const res = await favoritePodcast(podcast._id, token);
+      if (res.status === 200) {
+        setFavourite(!favourite);
+      }
+    } catch (err) {
+      console.error('Error toggling favorite:', err);
+      dispatch(
+        openSnackbar({
+          message: err?.response?.data?.message || 'Error updating favorite',
+          severity: 'error',
+        })
+      );
+    }
+  };
+
+  // React.useEffect(() => {
+  //   //favorits is an array of objects in which each object has a podcast id match it to the current podcast id
+  //   if (user?.favorits?.find((fav) => fav._id === podcast._id)) {
+  //     setFavourite(true);
+  //   }
+  // }, [user]);
+
+  useEffect(() => {
+    if (user?.favorits?.find((fav) => fav._id === podcast?._id)) {
+      setFavourite(true);
+    }
+  }, [user, podcast]);
+
   return (
-    <Card to={`/podcast/${podcast._id}`}>
+    <Card to={`/podcast/${podcast?._id}`}>
       <div>
         <Top>
-          <Link
-            onClick={() => {
-              if (!currentUser) {
-                dispatch(openSignin());
-              } else {
-                favoritpodcast();
-              }
-            }}
-          >
-            <Favorite>
-              {favourite ? (
-                <FavoriteIcon
-                  style={{ color: '#E30022', width: '16px', height: '16px' }}
-                ></FavoriteIcon>
-              ) : (
-                <FavoriteIcon
-                  style={{ width: '16px', height: '16px' }}
-                ></FavoriteIcon>
-              )}
-            </Favorite>
-          </Link>
-          <CardImage src={podcast.thumbnail} />
+          <Favorite onClick={handleFavoriteClick}>
+            <FavoriteIcon
+              sx={{
+                width: '16px',
+                height: '16px',
+                color: favourite ? '#E30022' : 'inherit',
+              }}
+            />
+          </Favorite>
+          <CardImage src={podcast.thumbnail} loading='lazy' />
         </Top>
         <CardInformation>
           <MainInfo>
@@ -226,11 +274,70 @@ export const PodcastCard = ({ podcast, user, setSignInOpen }) => {
       </div>
       <PlayIcon>
         {podcast?.type === 'video' ? (
-          <PlayArrowIcon style={{ width: '28px', height: '28px' }} />
+          <PlayArrowIcon sx={{ width: '28px', height: '28px' }} />
         ) : (
-          <HeadphonesIcon style={{ width: '28px', height: '28px' }} />
+          <HeadphonesIcon sx={{ width: '28px', height: '28px' }} />
         )}
       </PlayIcon>
     </Card>
   );
-};
+});
+
+//   return (
+//     <Card to={`/podcast/${podcast?._id}`}>
+//       <div>
+//         <Top>
+//           <Link
+//             onClick={() => {
+//               if (!currentUser) {
+//                 dispatch(openSignin());
+//               } else {
+//                 favoritpodcast();
+//               }
+//             }}
+//           >
+//             <Favorite>
+//               {favourite ? (
+//                 <FavoriteIcon
+//                   style={{ color: '#E30022', width: '16px', height: '16px' }}
+//                 ></FavoriteIcon>
+//               ) : (
+//                 <FavoriteIcon
+//                   style={{ width: '16px', height: '16px' }}
+//                 ></FavoriteIcon>
+//               )}
+//             </Favorite>
+//           </Link>
+//           <CardImage src={podcast.thumbnail} />
+//         </Top>
+//         <CardInformation>
+//           <MainInfo>
+//             <Title>{podcast.name}</Title>
+//             <Description>{podcast.desc}</Description>
+//             <CreatorInfo>
+//               <div
+//                 style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+//               >
+//                 <Avatar
+//                   src={podcast.creator.img}
+//                   style={{ width: '26px', height: '26px' }}
+//                 >
+//                   {podcast.creator.name?.charAt(0).toUpperCase()}
+//                 </Avatar>
+//                 <CreatorName>{podcast.creator.name}</CreatorName>
+//               </div>
+//               <Views>• {podcast.views} Views</Views>
+//             </CreatorInfo>
+//           </MainInfo>
+//         </CardInformation>
+//       </div>
+//       <PlayIcon>
+//         {podcast?.type === 'video' ? (
+//           <PlayArrowIcon style={{ width: '28px', height: '28px' }} />
+//         ) : (
+//           <HeadphonesIcon style={{ width: '28px', height: '28px' }} />
+//         )}
+//       </PlayIcon>
+//     </Card>
+//   );
+// };

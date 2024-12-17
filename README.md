@@ -186,8 +186,8 @@ const audioPlayerSlice = createSlice({
 MIT License
 
 ## 📞 문의
-- Email: [이메일 주소]
-- GitHub: [GitHub 프로필 링크]
+- Email: whd793@gmail.com
+- GitHub: https://github.com/whd793
 
 ---
 

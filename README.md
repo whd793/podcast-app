@@ -14,7 +14,8 @@
 # 🎧 PodStream - 팟캐스트 스트리밍 플랫폼
 
 ## 📌 프로젝트 소개
-PodStream은 사용자들이 오디오와 비디오 팟캐스트를 쉽게 공유하고 시청/청취할 수 있는 스트리밍 플랫폼입니다. 직관적인 UI/UX와 안정적인 스트리밍 서비스를 제공합니다.
+PodStream은 사용자들이 오디오와 비디오 팟캐스트를 쉽게 공유하고 시청/청취할 수 있는 스트리밍 플랫폼입니다.  React와 Node.js를 기반으로 개발되었으며,
+직관적인 UI/UX와 안정적인 스트리밍 서비스를 제공합니다.
 
 ## ⭐ 주요 기능
 
@@ -166,6 +167,146 @@ const audioPlayerSlice = createSlice({
   }
 });
 ```
+### 인증 시스템
+```javascript
+// 카카오 OAuth 및 이메일 인증 구현
+export const kakaoAuthSignIn = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) {
+      // 새 사용자 생성 로직
+      const user = new User({ ...req.body, kakaoSignIn: true });
+      await user.save();
+      const token = jwt.sign({ id: user._id }, process.env.JWT);
+      res.status(200).json({ token, user: user });
+    }
+    // ... 기존 사용자 처리 로직
+  } catch (err) {
+    next(err);
+  }
+};
+```
+
+### 미디어 플레이어
+```javascript
+// 커스텀 오디오 플레이어 구현
+const AudioPlayer = ({ episode, podid, currenttime, index }) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [volume, setVolume] = useState(1);
+  const audioRef = useRef(null);
+
+  const handleTimeUpdate = () => {
+    dispatch(
+      setCurrentTime({
+        currenttime: audioRef.current.currentTime,
+      })
+    );
+  };
+
+  // 이전/다음 에피소드 처리
+  const goToNextPodcast = () => {
+    if (podid.episodes.length === index + 1) {
+      dispatch(
+        openSnackbar({
+          message: 'This is the last episode',
+          severity: 'info',
+        })
+      );
+      return;
+    }
+    // ... 다음 에피소드 재생 로직
+  };
+};
+```
+
+### 데이터베이스 구조
+```javascript
+// 최적화된 MongoDB 스키마
+const PodcastsSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  desc: String,
+  thumbnail: String,
+  creator: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
+  tags: [String],
+  type: String,
+  category: String,
+  views: {
+    type: Number,
+    default: 0,
+  },
+  episodes: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Episodes',
+  }]
+});
+```
+
+### 상태 관리
+```javascript
+// Redux를 활용한 상태 관리
+const audioplayer = createSlice({
+  name: 'audioplayer',
+  initialState: {
+    openplayer: false,
+    type: 'audio',
+    episode: null,
+    podid: null,
+    currenttime: 0,
+    index: 0,
+  },
+  reducers: {
+    openPlayer: (state, action) => {
+      state.openplayer = true;
+      state.type = action.payload.type;
+      state.episode = action.payload.episode;
+      // ... 기타 상태 업데이트
+    },
+  },
+});
+```
+
+### 다국어 지원
+```javascript
+useEffect(() => {
+  fetch('https://ipapi.co/json/')
+    .then((response) => response.json())
+    .then((data) => {
+      const userCountry = data.country_code;
+      if (userCountry === 'KR') {
+        i18n.changeLanguage('ko');
+      } else {
+        i18n.changeLanguage('en');
+      }
+    })
+    .catch(() => i18n.changeLanguage('en'));
+}, []);
+```
+
+## 🎯 프로젝트 성과
+- 사용자 인증 및 권한 관리 시스템 구축
+- 안정적인 미디어 스트리밍 서비스 구현
+- 다국어 지원으로 서비스 접근성 향상
+- 직관적인 사용자 인터페이스 설계
+
+## 📝 프로젝트를 통해 배운 점
+1. React와 Node.js를 활용한 풀스택 개발 경험
+2. JWT를 활용한 인증 시스템 구현 방법
+3. 미디어 스트리밍 서비스 개발 노하우
+4. MongoDB를 활용한 데이터 모델링
+5. 상태 관리 라이브러리 활용 방법
+
+## 🚀 향후 개선 계획
+1. 검색 기능 강화
+2. 사용자 상호작용 기능 추가
+3. 성능 최적화
+4. 모바일 반응성 개선
+
 
 ## 📱 스크린샷
 [주요 화면 스크린샷 추가 예정]

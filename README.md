@@ -1,5 +1,12 @@
 # 🎧 PodStream
 
+
+<p align="center">
+<img width="70%" align="center" alt="Screen Shot 2025-02-20 at 4 20 35 AM" src="https://github.com/user-attachments/assets/1176d40c-170a-4f14-9146-21a61359407e" />
+ 
+</p>
+
+
 <div align="center">
   <h3>
     <a href="#korean">한국어</a> |
@@ -307,9 +314,25 @@ useEffect(() => {
 3. 성능 최적화
 4. 모바일 반응성 개선
 
-
 ## 📱 스크린샷
-[주요 화면 스크린샷 추가 예정]
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/2847144f-1423-409c-ac28-339db7f5871f" width="25%" alt="홈 화면" />
+  <img src="https://github.com/user-attachments/assets/84361e69-83d8-41e6-a77e-b0e15855555e" width="25%" alt="팟캐스트 목록" />
+  <img src="https://github.com/user-attachments/assets/5297d891-447b-4816-8e5f-4bd5b9d420b5" width="25%" alt="에피소드 화면" />
+</p>
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/f27cf31d-a246-4617-86e8-faf5ccf65243" width="25%" alt="플레이어 화면" />
+  <img src="https://github.com/user-attachments/assets/aeab2efd-3f93-4189-9d0e-3b3878bc333a" width="25%" alt="검색 결과" />
+  <img src="https://github.com/user-attachments/assets/77fc07da-affe-4322-9752-a381225cccea" width="25%" alt="설정 화면" />
+</p>
+
+<p align="center">
+<img width="70%" align="center" alt="Screen Shot 2025-02-20 at 4 20 35 AM" src="https://github.com/user-attachments/assets/1176d40c-170a-4f14-9146-21a61359407e" />
+ 
+</p>
+
 
 ## 🚀 배포 정보
 - Frontend: Vercel
@@ -490,6 +513,26 @@ const uploadFile = async (file) => {
   // File validation
 }
 ```
+
+
+## 📱 Screenshots
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/2847144f-1423-409c-ac28-339db7f5871f" width="25%" alt="홈 화면" />
+  <img src="https://github.com/user-attachments/assets/84361e69-83d8-41e6-a77e-b0e15855555e" width="25%" alt="팟캐스트 목록" />
+  <img src="https://github.com/user-attachments/assets/5297d891-447b-4816-8e5f-4bd5b9d420b5" width="25%" alt="에피소드 화면" />
+</p>
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/f27cf31d-a246-4617-86e8-faf5ccf65243" width="25%" alt="플레이어 화면" />
+  <img src="https://github.com/user-attachments/assets/aeab2efd-3f93-4189-9d0e-3b3878bc333a" width="25%" alt="검색 결과" />
+  <img src="https://github.com/user-attachments/assets/77fc07da-affe-4322-9752-a381225cccea" width="25%" alt="설정 화면" />
+</p>
+
+<p align="center">
+<img width="70%" align="center" alt="Screen Shot 2025-02-20 at 4 20 35 AM" src="https://github.com/user-attachments/assets/1176d40c-170a-4f14-9146-21a61359407e" />
+ 
+</p>
 
 ## 🔧 Installation & Setup
 
